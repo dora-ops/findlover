@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--公共css与js文件-->
+    <th:block th:include="front/common/common_resource::resources"/>
+    <title>专属定制</title>
+    <link th:href="@{/css/personalmake.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<script th:src="@{/goodsdetail/jquery-1.7.2.min.js}"></script>
+<!-- 导航栏 -->
+<th:block th:include="front/common/header::nav"/>
+<div class="container">
+    <div class="order-status-holder">
+        <h1 class="holder-header">我的进度</h1>
+        <div class="steps-holder">
+            <div class="_step focused">
+                <span class="num-icon">1</span>
+                <span class="num-tip">初步确定<br>浪漫框架</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">2</span>
+                <span class="num-tip">下单预定<br>支付定金</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">3</span>
+                <span class="num-tip">填写<br>浪漫档案表</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">4</span>
+                <span class="num-tip">拟定详细<br>策划方案</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">5</span>
+                <span class="num-tip">确认方案<br>付预付款</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">6</span>
+                <span class="num-tip">统筹协调<br>准备浪漫</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">7</span>
+                <span class="num-tip">现场彩排<br>支付尾款</span>
+            </div>
+            <div class="_step">
+                <span class="num-icon">8</span>
+                <span class="num-tip">享受<br>浪漫求婚</span>
+            </div>
+
+        </div>
+    </div>
+    <div class="confirm-holder">
+        <div class="confirm-header">提交需求</div>
+        <div class="confirm-body" id="activty-confirm">
+            <div class="requirements" id="activty-theme">
+                <div class="title">活动主题：</div>
+                <div class="items">
+                    <a href="javascript:;" data-id="1" data-href="http://www.telllove520.com/submitForm/1/?from=" class="active">求婚</a>
+                    <a href="javascript:;" data-id="2" data-href="http://www.telllove520.com/submitForm/2/?from=">表白</a>
+                    <a href="javascript:;" data-id="3" data-href="http://www.telllove520.com/submitForm/3/?from=">生日惊喜</a>
+                    <a href="javascript:;" data-id="4" data-href="http://www.telllove520.com/submitForm/4/?from=">纪念日惊喜</a>
+                    <a href="javascript:;" data-id="5" data-href="http://www.telllove520.com/submitForm/5/?from=">情感挽回</a>
+                    <a href="javascript:;" data-id="99" data-href="http://www.telllove520.com/submitForm/99/?from=">其他</a>
+                </div>
+            </div>
+            <div class="requirements" id="activty-product">
+                <div class="title">套餐定制：</div>
+                <div class="items">
+                    <a href="javascript:;" th:data-id="${itemid}" class="_with_img _product active">
+                        <img th:src="${displayImage}" class="lazy" th:data-original="${displayImage}" style="display: inline;">
+                        <p th:text="${title}">套餐标题</p>
+                    </a>
+
+                </div>
+            </div>
+            <div class="requirements " id="priceTypes-container">
+                <div class="title">选择版本：</div>
+                <div class="items priceTypes" id="priceTypes-holder">
+                    <a th:if="${typeA}" href="javascript:;" data-id="1" class="active" th:text="${typeA}+' ¥'+${typeAPrice}+' 起'">基础档<span class="price" th:text="${typeAPrice}">¥****<small>起</small></span></a>
+                    <a th:if="${typeB}" href="javascript:;" data-id="2" class="" th:text="${typeB}+' ¥'+${typeBPrice}+' 起'">性价比档<span class="price" th:text="${typeBPrice}">¥****<small>起</small></span></a>
+                    <a th:if="${typeC}" href="javascript:;" data-id="3" class="" th:text="${typeC}+' ¥'+${typeCPrice}+' 起'">豪华档<span class="price" th:text="${typeCPrice}">¥****<small>起</small></span></a>                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="requirements">
+                <div class="title">举行地区：</div>
+                <div class="items input-holder">
+                    <input type="text" class="form-control" name="activty-area" id="activty-area" placeholder="您想在哪个城市举行活动？">
+                </div>
+            </div>
+            <div class="requirements">
+                <div class="title">某些具体想法：</div>
+                <div class="items">
+                    <textarea class="form-control" name="activty-ps" id="activty-ps" placeholder="比如：很多朋友都要参加，在一个私人的场所。" rows="8"></textarea>
+                </div>
+            </div>
+            <div class="requirements">
+                <div class="title">您的称呼：</div>
+                <div class="items input-holder">
+                    <input type="text" class="form-control" name="activty-name" id="activty-name" placeholder="您的全名">
+                </div>
+            </div>
+            <div class="requirements">
+                <div class="title">您的手机号：</div>
+                <div class="items">
+                    <div class="form-group input-holder">
+                        <input type="number" class="form-control" name="activty-phone" id="activty-phone" placeholder="请输入常用手机号">
+                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<input type="number" class="form-control code-input" name="activty-code" id="activty-code" placeholder="请输入验证码">-->
+                        <!--<button type="button" class="btn btn-default msgBtn" id="sendSms-btn" data-target="activty-phone" data-type="order">发送验证码</button>-->
+                    <!--</div>-->
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="submit-holder">
+                <a class="index-btn" id="activty-submit" data-loading-text="提交需求中..." href="javascript:;">提交需求</a>            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="front/common/footer::foot"/>
+<script>
+    $("#activty-theme .items a").click(
+        function () {
+            $("#activty-theme .items a").removeAttr("class");
+            $(this).attr("class","active");
+        }
+    )
+    $("#priceTypes-holder a").click(function () {
+        $("#priceTypes-holder a").removeAttr("class");
+        $(this).attr("class","active");
+    })
+    $("#activty-submit").click(function () {
+        var activityTheme=$("#activty-theme .items a.active").text();
+        var taocanId=$("._with_img._product.active").attr("data-id");
+        var taocanName=$("._with_img._product.active p").text();
+        var versionId=$("#priceTypes-holder a.active").attr("data-id");
+        var versionDisplayName=$("#priceTypes-holder a.active").text();
+        var activityArea=$("#activty-area").attr("value");
+        var idea=$("#activty-ps").attr("value");
+        var nickname=$("#activty-name").attr("value");
+        var telPhone=$("#activty-phone").attr("value");
+        var taocanImage=$(".lazy").attr("src")
+        console.log(activityTheme,taocanId,versionDisplayName,activityArea,idea,nickname,telPhone,taocanName);
+        $.post("/order",
+            {
+                activityTheme:activityTheme,
+                taocanId:taocanId,
+                versionId:versionId,
+                versionDisplayName:versionDisplayName,
+                activityArea:activityArea,
+                idea:idea,
+                nickname:nickname,
+                telPhone:telPhone,
+                taocanName:taocanName,
+                taocanImage:taocanImage
+            },
+            function(data,status) {
+                generateOrder(data);
+            }
+        );
+    })
+    function generateOrder(data) {
+        console.log(data);
+        var responseData=$.parseJSON(data);
+        if(responseData["state"]=="false"){
+            alert("订单生成失败！");
+        }
+        if(responseData["state"]=="success"){
+            window.location.href=responseData["url"];
+        }
+    }
+</script>
+</body>
+</html>

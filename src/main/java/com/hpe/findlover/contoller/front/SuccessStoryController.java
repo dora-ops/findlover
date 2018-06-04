@@ -2,13 +2,15 @@ package com.hpe.findlover.contoller.front;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.hpe.findlover.model.*;
+import com.hpe.findlover.model.SuccessStory;
+import com.hpe.findlover.model.SuccessStoryLike;
+import com.hpe.findlover.model.SuccessStoryReply;
+import com.hpe.findlover.model.UserBasic;
 import com.hpe.findlover.service.SuccessStoryLikeService;
 import com.hpe.findlover.service.SuccessStoryReplyService;
 import com.hpe.findlover.service.SuccessStoryService;
 import com.hpe.findlover.service.UploadService;
 import com.hpe.findlover.util.SessionUtils;
-import org.apache.tools.ant.taskdefs.condition.Http;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +95,9 @@ public class SuccessStoryController {
         String filename = successStory.getContent();
         byte[] bytes = uploadService.downloadFile(filename);
         String content = new String(bytes, "utf-8");
-        UserBasic userBasic= (UserBasic) session.getAttribute("user");
+//        UserBasic userBasic= (UserBasic) session.getAttribute("user");
+        UserBasic userBasic=new UserBasic();
+        userBasic.setId(100002);
         Boolean like=successStoryLikeService.selectByStoryIdAndUserId(id,userBasic.getId());
         int likeCount=successStoryLikeService.selectCountByStoryId(id);
         PageHelper.startPage(1,5,"reply_time desc");

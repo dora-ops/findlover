@@ -75,8 +75,17 @@ public class ShiroConfig {
 
 		// 配置路径过滤链.
 		Map<String, String> filterChainMap = new LinkedHashMap<>();
+		//管理员配置
+		filterChainMap.put("/admin/**", "adminAuth");
 
+		//作家配置
+		filterChainMap.put("/writer/**", "writerAuth");
 
+		filterChainMap.put("/usercenter/**", "userAuth");
+		filterChainMap.put("/letter/**", "userAuth");
+		filterChainMap.put("/follow/**", "userAuth");
+		filterChainMap.put("/visit_trace/**", "userAuth");
+		filterChainMap.put("/notice/**", "userAuth");
         filterChainMap.put("/**", "anon");
 		// 配置公共资源文件过滤路径
 		filterChainMap.put("/js/**", "anon");
@@ -90,11 +99,11 @@ public class ShiroConfig {
 		filterChainMap.put("/file/**", "anon");
 		filterChainMap.put("/favicon.ico", "anon");
 
-		//管理员配置
-		filterChainMap.put("/admin/**", "adminAuth");
-
-		//作家配置
-		filterChainMap.put("/writer/**", "writerAuth");
+//		//管理员配置
+//		filterChainMap.put("/admin/**", "adminAuth");
+//
+//		//作家配置
+//		filterChainMap.put("/writer/**", "writerAuth");
 
 		//用户配置
 		filterChainMap.put("/logout", "anon");

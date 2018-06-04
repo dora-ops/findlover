@@ -37,7 +37,7 @@ function loadMessage() {
                 var story = data.list[i];
                 var tr = $("  <tr>\n" +
                     '         <td>' + story.id + '</td>\n' +
-                    '         <td>' + story.leftUser + '&' + story.rightUser + '</td>\n' +
+                    '         <td>' + story.leftUser  + '</td>\n' +
                     ' <td>' + story.title + '</td>\n' +
                     ' <td>' + story.successTime + '</td>\n');
                 switch (story.status) {
@@ -52,7 +52,7 @@ function loadMessage() {
                         tr.append($('<td><a class="btn btn-sm btn-info" href="' + contextPath + 'admin/success_story/success_story_detail/' + story.id + '"><i class="fa fa-edit"></i>&nbsp;查看详情</a></td>'));
                         break;
                     case 2:
-                        tr.append("<td><button class=\"btn btn-sm btn-warning\"><i class=\"fa fa-times\"></i>&nbsp;待右手审核</button></td>");
+                        tr.append("<td><button class=\"btn btn-sm btn-warning\"><i class=\"fa fa-times\"></i>&nbsp;待审核</button></td>");
                         tr.append("<td><button id = 'story-status-" + story.id + "-2' class=\"btn btn-sm btn-warning\"><i class=\"fa fa-times\"></i>&nbsp;未上架</button></td>");
                         tr.append($('<td><a class="btn btn-sm btn-info" href="' + contextPath + 'admin/success_story/success_story_detail/' + story.id + '"><i class="fa fa-edit"></i>&nbsp;查看详情</a></td>'));
                         break;

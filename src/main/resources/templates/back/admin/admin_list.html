@@ -4,6 +4,9 @@
     <th:block th:include="back/common/common_resource :: resources"/>
     <title>Title</title>
     <script th:src="@{/js/back/admin_list.js}"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/myorder.css}">
+    <!--引入My97DatePicker日期组件的js文件 -->
+    <script type="text/javascript" th:src="@{/plugins/My97DatePicker/WdatePicker.js}"> </script>
     <th:block th:remove="all">
         <link rel="stylesheet" href="/static/css/bootstrap-3.1.1.min.css">
         <link rel="stylesheet" href="/static/css/font-awesome.css">
@@ -13,82 +16,91 @@
 <div class="wrapper">
     <div class="content-wrapper" style="margin-left: 0;padding-top: 0">
         <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title">管理员列表</h3>
+        <div id="orderPanel" class="page-order tab-pane">
+            <!-- 搜索表单 开始 -->
+            <!-- 搜索表单 开始 -->
+            <form action="/home/order/page.action" method="GET" id="j-orderSearchForm" class="nice-validator n-default" novalidate="novalidate">
+                <!--顶部搜索 开始 @note: 第一期被废弃，前端不显示  -->
+                <div class="pageH-search dn">
+                    <div class="pageHeader_info">
+                        <div class="mod-topSearch">
+                            <input type="text" class="topSearch_input" placeholder="输入商品标题或订单号" name="keywords" disabled="disabled">
+                            <a href="javascript:void(0);" class="topSearch_btn" j-delegate="orderSearch"></a>
                         </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="container-fluid" style="margin-bottom: 15px">
-                                <div class="search-user">
-                                    <div>
-                                        <select id="admin-search-sel" class="form-control">
-                                            <option value="id">ID</option>
-                                            <option value="username">用户名</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <input type="text" id="admin-search-val" class="form-control">
-                                    </div>
-                                    <div>
-                                        <button id="admin-search-btn" type="button"
-                                                class="btn btn-primary dropdown-toggle" style="margin-bottom: 3px"><i
-                                                class="fa fa-search"></i>&nbsp;搜索
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table id="admin-table" class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>用户名</th>
-                                        <th>注册时间</th>
-                                        <th>最后一次登录时间</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div id="pagetool">
-                                <ul class="pagination">
-                                    <li class="head"><a href="#">首页</a></li>
-                                    <li class="lastpage"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                                    <li class="disabled morehead"><a>...</a></li>
-                                    <li class="page-4"><a></a></li>
-                                    <li class="page-3"><a></a></li>
-                                    <li class="page-2"><a></a></li>
-                                    <li class="page-1"><a></a></li>
-                                    <li class="currentpage active"><a>1</a></li>
-                                    <li class="page_1"><a></a></li>
-                                    <li class="page_2"><a></a></li>
-                                    <li class="page_3"><a></a></li>
-                                    <li class="page_4"><a></a></li>
-                                    <li class="disabled moretail"><a>...</a></li>
-                                    <li class="nextpage"><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
-                                    <li class="tail"><a href="#">尾页</a></li>
-                                </ul>
-                                <div style="float: right;margin: 28px;font-size: 15px;font-weight: 400;color: #666666;">
-                                    共
-                                    <span id="total"></span>
-                                    条数据，每页显示
-                                    <select id="pageSize-sel">
-                                    </select>
-                                    条
-                                </div>
+                        <div class="mod-topDropdown">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" href="javascript:void(0);" j-delegate="toggleFilterPanel">
+                                    <span class="dropdown-toggle_txt">更多筛选条件</span>
+                                    <i class="arrow-icon"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!--顶部搜索 结束-->
+
+                <!--订单搜索 开始-->
+                <div class="orderSearch_main" id="j-orderFilterPanel">
+                    <ul class="whole">
+
+                        <li class="whole_col1">
+                            <label class="whole_label">成交时间：</label>
+                            <div class="order_selectBox select_timeBox">
+                                <div>
+                                    <input class="popupDatepicker" name="st" value="" data-initialval="" data-elem="fromDay" j-delegate="createDatePicker" data-minyear="2014" data-maxyear="" data-mindate="2014-09-30" data-maxdate="" placeholder="起始日期" onclick="WdatePicker()">
+                                </div>
+                            </div>
+                            <span class="sellCenter_thLine">-</span>
+                            <div class="order_selectBox select_timeBox">
+                                <div>
+                                    <input class="popupDatepicker" name="et" value="" data-initialval="" data-elem="toDay" j-delegate="createDatePicker" data-minyear="2014" data-maxyear="" data-mindate="2014-09-30" data-maxdate="" placeholder="截止日期" onclick="WdatePicker()">
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- 卖家昵称 筛选条件 @note: 第一期废弃，前端不显示 -->
+
+
+
+
+
+                        <li class="whole_col3">
+                            <div class="pageH-btn">
+                                <a href="javascript:void(0);" class="mod-comm_btn" j-delegate="advancedOrderSearch">搜索</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!--订单搜索 结束-->
+            </form>
+            <!-- 搜索表单 结束 -->
+            <!-- 搜索表单 结束 -->
+
+
+            <!-- 顶部操作分页 开始 @note: 第一期被废弃，前端不显示了 -->
+
+            <!-- 顶部操作分页 结束 -->
+            <!-- 主体 开始 -->
+            <div class="orderT_bd orderTable_newPage" data-elem="loadingTipContainer">
+                <!-- foreach start 以店铺为单位进行循环 -->
+                <!-- 单店铺购物车 开始 -->
+                <!--  分包裹显示 start -->
+                <table class="newOrder_tableCon" width="100%" border="0" cellspacing="0" cellpadding="0" j-delegate="hoverAddClass" data-hoveraddclass="shopOrderList-selected">
+                    <colgroup>
+                        <col class="baobei">
+                        <col class="price">
+                        <col class="nub">
+                        <col class="goods_operation">
+                        <col class="disbursements">
+                        <col class="transaction_status">
+                        <col class="trade_operate">
+                    </colgroup>
+
+                </table>
+                <!-- 分包裹显示 end -->
             </div>
-        </section>
+            <!-- 主体 结束is-hidden -->
+        </div>
     </div>
 </div>
 <div class="modal fade" id="edit-admin-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -121,5 +133,180 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<script>$("#order-tab").click(function(){
+    queryOrder();
+});
+$(".pageH-btn a").click(function () {
+    queryOrder();
+})
+</script>
+<script>
+    function queryOrder() {
+        $(".newOrder_tableCon tbody").remove();
+        var startData=$("input[name=\"st\"]").val();
+        var endData=$("input[name=\"et\"]").val();
+        console.log(startData,endData);
+        $.post("/admin/queryOrder",
+            {
+                startData:startData,
+                endData:endData
+            },
+            function (data,status) {
+                // console.log(data);
+                var responseData=$.parseJSON(data);
+                console.log(responseData);
+                if(responseData["state"]=="success"){
+                    var orderlist=$.parseJSON(responseData["data"]);
+                    console.log(orderlist);
+                    for (var i=0;i<orderlist.length;i++){
+                        var oneItemData=orderlist[i];
+                        console.log(oneItemData);
+                        var htmlText="<tbody>\n" +
+                            "                        <tr class=\"tableCon_titleTr\">\n" +
+                            "                            <td colspan=\"7\">\n" +
+                            "\n" +
+                            "                                <div class=\"shop_info  ml10 ml10\" style=\"float:left\">\n" +
+                            "                                    <div class=\"cenOrder_box01\">\n" +
+                            "\t\t\t\t\t\t\t<span class=\"shop_info_date\">\n" +
+                            "\n" +
+                            "\t\t\t\t\t\t\t\t<em class=\"mr10 fsb\">"+formatDate(oneItemData["orderTime"])+"</em>\n" +
+                            "\t\t\t\t\t\t\t</span>\n" +
+                            "                                        <span class=\"shop_info_orderNumber\">\n" +
+                            "\t\t\t\t\t\t\t\t<em>订单号："+oneItemData["orderId"]+"</em>\n" +
+                            "\t\t\t\t\t\t\t</span>\n" +
+                            "                                    </div>\n" +
+                            "                                    <span class=\"shop_info_site\">\n" +
+                            "    <span>"+oneItemData["activityTheme"]+"---</span>\n" +
+                            "    <span>"+oneItemData["nickname"]+"</span>\n" +
+                            "\n" +
+                            "\t\t\t\t\t\t</span>\n" +
+                            "                                    <a class=\"contact_link dn\" href=\"javascript:void(0);\" rseat=\"1501231_cntctus\" data-pb=\"r=爱奇艺i71官方旗舰店&amp;stno=1151376996\" j-delegate=\"openContactServantWindow\" data-shopid=\"1151376996\" onclick=\"\"></a>\n" +
+                            "                                </div>\n" +
+                            "                                <div style=\"float:left\">"+oneItemData["idea"]+"</div>\n" +
+                            "                       \n" +
+                            "                            </td>\n" +
+                            "                        </tr>\n" +
+                            "\n" +
+                            "                        <tr class=\"tableCon_conTr\">\n" +
+                            "                            <td class=\"baobei\">\n" +
+                            "                                <a href=\"/goodsdetail.html?itemid="+oneItemData["taocanId"]+"\" target=\"_blank\" class=\"activity_pic\">\n" +
+                            "\t\t\t\t\t\t\t<span class=\"order_picBox\">\n" +
+                            "\t\t\t\t\t\t\t\t<img src=\""+oneItemData["taocanImage"]+"\" alt=\""+oneItemData["taocanName"]+"\">\n" +
+                            "\t\t\t\t\t\t\t</span>\n" +
+                            "                                </a>\n" +
+                            "                                <div class=\"orderItems_content\">\n" +
+                            "                                    <div class=\"orderItems_link\">\n" +
+                            "                                        <a href=\"/goodsdetail.html?itemid="+oneItemData["taocanId"]+"\"" +"target=\"_blank\">"+oneItemData["taocanName"]+"</a>\n" +
+                            "                                    </div>\n" +
+                            "                                    <div class=\"orderItems_about\">\n" +
+                            "                                        <p class=\"info_section\" title=\""+oneItemData["versionDisplayName"]+"\">\n" +
+                            "                                            <span class=\"tx-inline\">"+oneItemData["versionDisplayName"]+"</span>\n" +
+                            "                                        </p></div>\n" +
+                            "                                </div>\n" +
+                            "                            </td>\n" +
+                            "                            <td class=\"price\">\n" +
+                            "                                <div class=\"price_inner\">\n" +
+                            "                                    <div class=\"priceItems\">\n" +
+                            "                                        <em >总价格</em>\n" +
+                            "                                    </div>\n" +
+                            "                                    <div class=\"priceItems\">\n" +
+                            "                                        <em class=\"price-now\">"+oneItemData["totalPrice"]+"起"+"</em>\n" +
+                            "                                    </div>\n" +
+                            "                                </div>\n" +
+                            "                            </td>\n" +
+                            "\n" +
+                            "                            <td class=\"nub\">\n" +
+                            "                                <div class=\"nub_inner\"><p>"+oneItemData["activityArea"]+"</p>\n" +
+                            "\n" +
+                            "                                </div>\n" +
+                            "                            </td>\n" +
+                            "                            <td class=\"goods_operation\">\n" +
+                            "                                <div class=\"goodsOPeration_inner\">\n" +
+                            "                                    <div class=\"itemOperateItems\"><p>"+oneItemData["telPhone"]+"</p>\n" +
+                            "\n" +
+                            "                                    </div>\n" +
+                            "                                </div>\n" +
+                            "                            </td>\n" +
+                            "                            <!-- 只有 第一个商品的ul li中才输出总价 -->\n" +
+                            "                            <td rowspan=\"1\" class=\"disbursements\">\n" +
+                            "                                <div class=\"disbursements_inner\">\n" +
+                            "                                    <div class=\"sumItems\">\n" +
+                            "                                        <em class=\"sumItems_price\">"+oneItemData["prepayPrice"]+"</em>\n" +
+                            "                                    </div>\n" +
+                            "                                    <div class=\"sumItems\">\n" +
+                            "                                        <p class=\"sumItems_info\" title=\"（预付价格）\">（预付价格）</p>\n" +
+                            "                                    </div>\n" +
+                            "                                </div>\n" +
+                            "                            </td>\n" +
+                            "\n" +
+                            "                            <td rowspan=\"1\" class=\"transaction_status\">\n" +
+                            "                                <div class=\"transStatus_inner\">\n" +
+                            "                                    <div class=\"statusItems\">等待买家付款</div>\n" +
+                            "                                    <div class=\"statusItems\">\n" +
+                            "                                        \n" +
+                            "                                    </div>\n" +
+                            "                                    <!-- 查看物流信息展示弹层时添加class order_wlPop (分支1.6.1)-->\n" +
+                            "                                    <div class=\"statusItems \">\n" +
+                            "                                    </div>\n" +
+                            "                                </div>\n" +
+                            "                            </td>\n" +
+                            "\n" +
+                            "                            <td rowspan=\"1\" class=\"trade_operate\">\n";
+
+                        var htmltext2="<div class=\"tradeOPerate_inner\">\n" +
+                            "</div>\n" +
+                            "</td>\n" +
+                            "</tr>\n" +
+                            "</tbody>";
+                        if(oneItemData["state"]==0){
+                            htmlText=htmlText.replace('等待买家付款', '等待买家付款');
+                            htmltext2="<div class=\"tradeOPerate_inner\">\n" +
+                                "</div>\n" +
+                                "</td>\n" +
+                                "</tr>\n" +
+                                "</tbody>";
+                        }
+                        if(oneItemData["state"]==1){
+                            htmlText=htmlText.replace('等待买家付款', '买家已付款');
+                            htmltext2="<div class=\"tradeOPerate_inner\">\n" +
+                                "</div>\n" +
+                                "</td>\n" +
+                                "</tr>\n" +
+                                "</tbody>";
+                        }
+                        if(oneItemData["state"]==2){
+                            htmlText=htmlText.replace('等待买家付款', '订单已关闭');
+                            htmltext2="<div class=\"tradeOPerate_inner\">\n" +
+                                "</div>\n" +
+                                "</td>\n" +
+                                "</tr>\n" +
+                                "</tbody>";
+                        }
+                        $(".newOrder_tableCon").append(htmlText+htmltext2);
+                    }
+                }
+            }
+
+        )
+    }
+    function   formatDate(now)   {
+        var   now= new Date(now);
+        var   year=now.getFullYear();
+        var   month=now.getMonth()+1;
+        var   date=now.getDate();
+        var   hour=now.getHours();
+        var   minute=now.getMinutes();
+        var   second=now.getSeconds();
+        return   year+"年"+fixZero(month,2)+"月"+fixZero(date,2)+"日"+fixZero(hour,2)+":"+fixZero(minute,2)+":"+fixZero(second,2);
+    }
+    function fixZero(num,length){
+        var str=""+num;
+        var len=str.length;     var s="";
+        for(var i=length;i-->len;){
+            s+="0";
+        }
+        return s+str;
+    }
+</script>
 </body>
 </html>

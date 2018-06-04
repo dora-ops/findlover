@@ -1,13 +1,16 @@
 package com.hpe.findlover.contoller.back;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hpe.findlover.model.Admin;
+import com.hpe.findlover.model.UserOrder;
 import com.hpe.findlover.service.AdminRoleService;
 import com.hpe.findlover.service.AdminService;
 import com.hpe.findlover.service.RoleService;
+import com.hpe.findlover.service.UserOrderService;
 import com.hpe.findlover.token.CustomToken;
 import com.hpe.findlover.util.Identity;
 import com.hpe.findlover.util.LoverUtil;
@@ -25,11 +28,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("admin")
@@ -38,14 +41,53 @@ public class AdminController {
 	private final AdminService adminService;
 	private final RoleService roleService;
 	private final AdminRoleService adminRoleService;
-
+    private final UserOrderService userOrderService;
 	@Autowired
-	public AdminController(AdminService adminService, RoleService roleService, AdminRoleService adminRoleService) {
+	public AdminController(AdminService adminService, RoleService roleService, AdminRoleService adminRoleService,UserOrderService userOrderService) {
 		this.adminService = adminService;
 		this.roleService = roleService;
 		this.adminRoleService = adminRoleService;
+		this.userOrderService=userOrderService;
 	}
+	@RequestMapping("queryOrder")
+    @ResponseBody
+    public String queryOrder(@RequestParam("startData") String startData,@RequestParam("endData") String endData,HttpSession httpSession){
+        Admin admin=(Admin) httpSession.getAttribute("admin");
+        if(admin==null){
+            return "{\"state\":\"false\"}";
+        }
+        System.out.println(startData+endData);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date data1=null;
+        try {
+            data1 = format.parse(startData);
+        }catch (Exception e){
+        }
+        Date date2=null;
+        try {
+            date2=format.parse(endData);
+        }catch (Exception e){
+        }
+//        if(data1==null||date2==null){
+//            return "{\"state\":\"false\"}";
+//        }
+//        Calendar calendar1=Calendar.getInstance();
+//        calendar1.add(Calendar.HOUR_OF_DAY,-10);
+//        Calendar calendar2=Calendar.getInstance();
+        List<UserOrder> userOrders=userOrderService.selectByTime(data1,date2,null);
 
+        System.out.println("userOrders.size()"+userOrders.size());
+        JSONObject itemJSONObj=new JSONObject();
+        net.sf.json.JSONArray jsonArray=new net.sf.json.JSONArray();
+        itemJSONObj.put("state","success");
+        for(UserOrder userOrder:userOrders){
+            JSONObject tempJSONObj = JSONObject.parseObject(JSON.toJSONString(userOrder));
+            jsonArray.add(tempJSONObj);
+        }
+        itemJSONObj.put("data",jsonArray.toString());
+        System.out.println(itemJSONObj.toString());
+        return itemJSONObj.toString();
+    }
 	@GetMapping(value = {"", "index"})
 	public String index() {
 		return "back/index";

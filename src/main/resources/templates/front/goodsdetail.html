@@ -49,7 +49,7 @@
                     <div class="image-zoom-wrap" style="cursor: move; width:418px; height:418px;" data-magnifier="small-pic" rseat="mall_dp_A_bigPic">
                         <!-- <span data-magnifier='mark' style='width:100%; height:100%; display:inline-block; position:absolute; z-index:100; left:0px; top:0px; background:#fff; opacity:0.1;filter: alpha(opacity:10)'></span>
                               -->  <!-- 小图放大镜 -->
-                        <img th:src="@{/goodsdetail/mall_5afabe6714d455721527466d_1x1.jpg}" id="J_magnifier-smallImg" alt="">
+                        <img src="" id="J_magnifier-smallImg" alt="">
                         <span class="image-zoom" data-magnifier="float-layer" style="display: none; top:0; left:0;"></span>
                     </div>
                     <div class="image-retina" data-magnifier="big-pic" style="display:none;">
@@ -60,17 +60,9 @@
                 <div class="preview-thumbnail clearfix" id="J_UlThumb">
                     <div class="thumbnail-items">
                         <ul class="thumbnail-list clearfix" style="width: 2000px;">
-
-                            <li class="selected">
-                                <img data-img="1" class="img-hover" alt="xx" th:src="@{/goodsdetail/mall_5afabe6714d455721527466d_1x1.jpg}" width="50" height="50"  onclick=imgclick(event)></li>
-                            <li >
-                                <img data-img="1" class="img-hover" alt="xx" th:src="@{/goodsdetail/mall_5afabe6774d57908d8557ba6_1x1.jpg}" width="50" height="50"  onclick=imgclick(event)></li>
-                            <li>
-                                <img data-img="1" class="img-hover" alt="xx" th:src="@{/goodsdetail/mall_5afabe67d2999d6a920010dd_1x1.jpg}" width="50" height="50"  onclick=imgclick(event) ></li>
-                            <li>
-                                <img data-img="1" class="img-hover" alt="xx" th:src="@{/goodsdetail/mall_5afabe67f6882e3f3873903e_1x1.jpg}" width="50" height="50"  onclick=imgclick(event)></li>
-                            <li>
-                                <img data-img="1" class="img-hover" alt="xx" th:src="@{/goodsdetail/mall_5afabe6714d45572174a2f90_1x1.jpg}" width="50" height="50" onclick=imgclick(event) ></li>
+                            <li th:each="displayImage:${displayImages}">
+                                <img data-img="1" class="img-hover" alt="xx" th:src="${displayImage}" width="50" height="50"  onclick=imgclick(event)>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -81,11 +73,13 @@
             </div>
             <!-- 购买商品－选择条件 -->
             <div class="mod-goods-detail" id="J_mod-goods-detail" data-goods-itemid="34692090">
-                <h3 class="detail-title" title="秘境森林">秘境森林详细介绍</h3>
-                <strong class="detail-subtitle" title="秘境森林">秘境森林</strong>
-                <strong class="detail-subtitle" title="试用场景：森林">试用场景：森林</strong>
-                <strong class="detail-subtitle" title="开通地区：济南">开通地区：济南</strong>
-                <strong class="detail-subtitle" title="价格说明：森林">价格说明：森林</strong>
+                <h3 class="detail-title" th:title="${title}" th:text="${title}">标题</h3>
+                <strong class="detail-subtitle" th:title="${introduce}" th:text="${introduce}">详细介绍</strong>
+
+                <strong class="detail-subtitle" th:title="${activityForm}" th:text="${activityForm}">适用场景：</strong>
+                <strong class="detail-subtitle" th:title="${activityPlace}" th:text="${activityPlace}">适用地点：</strong>
+                <strong class="detail-subtitle" th:title="${enableArea}" th:text="${enableArea}">开通地区：</strong>
+                <strong class="detail-subtitle" title="价格说明">价格说明：价格显示为最低价，具体价格请以购买价格为准</strong>
                 <!-- 是否限购 -->
                 <div class="detail-price">
                     <div class="price-item">
@@ -93,7 +87,7 @@
                         <div class="shopTitle_info" style="display:inline-block;">
                             <div class="promo_price">
 				                	<span class="price-now">
-				                		<em class="tm-yen">¥</em><strong class="tm-price" id="J_new-price">520</strong>
+				                		<em class="tm-yen">¥</em><strong class="tm-price" id="J_new-price" th:text="${displayPrice}+'起'">****</strong>
 				                	</span>
                                 <!-- 当前商品设置了限购等级 展示相应限购等级 start-->
                             </div>
@@ -109,28 +103,33 @@
                         <a class="noChoose_close" style="" id="J_noChoose-close" href="javascript:">×</a>
                     </div>
                     <div class="noChoose_inner">
-                        <form action="https://mall.iqiyi.com/item/19rro522ug" method="post" accept-charset="utf-8" id="J_form">
+                        <form action="/buy" method="post" accept-charset="utf-8" id="J_form">
                             <div class="detail-info">
 
 
                                 <!-- 套餐选择 -->
-                                <div class="info-item clearfix">
-                                    <label class="info-lbl J_info-lbl" style="width: 66px;">套餐选择</label>
-                                    <div class="dib-vm">
-                                        <ul class="mod-choose mod-choose-3434 clearfix" data-check-condition="颜色分类" data-prop-id="90000011" data-prop-name="颜色分类">
-                                            <li class="" data-delegate="el" data-par-index="1" data-index="0" data-propval-id="90004373" style="width: 32px;">
-                                                <a class="link-choose " href="javascript:void(0);" data-iconurl="https://mall6.qiyipic.com/mall/20180515/cd/c7/mall_5afabe67f6882e3f377ecdc7_1x1.jpg" style="background:url(https://mall6.qiyipic.com/mall/20180515/cd/c7/mall_5afabe67f6882e3f377ecdc7_30_30.jpg) center;" data-goods-id="90004373" title="范丞丞签名限定版香水">
-                                                </a>
-                                                <i class="icon-choose"></i>
-                                            </li>
-                                            <li class="" data-delegate="el" data-par-index="1" data-index="1" data-propval-id="90004481" style="width: 32px;">
-                                                <a class="link-choose " href="javascript:void(0);" data-iconurl="https://mall7.qiyipic.com/mall/20180512/8e/b3/mall_5af5c193d2999d6a94fd8eb3_1x1.jpg" style="background:url(https://mall7.qiyipic.com/mall/20180512/8e/b3/mall_5af5c193d2999d6a94fd8eb3_30_30.jpg) center;" data-goods-id="90004481" title="签名版香水+【丞星专享】钻石项链">
-                                                </a>
-                                                <i class="icon-choose"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                <!--<div class="info-item clearfix">-->
+                                    <!--<label class="info-lbl J_info-lbl" style="width: 66px;">套餐选择</label>-->
+                                    <!--<div class="dib-vm">-->
+                                        <!--<ul class="mod-choose mod-choose-3434 clearfix" data-check-condition="颜色分类" data-prop-id="90000011" data-prop-name="颜色分类">-->
+                                            <!--<li th:if="${typeA}" class="" data-delegate="el" data-par-index="1" data-index="0" data-propval-id="90004373" style="width: 32px;">-->
+                                                <!--<a class="link-choose " data-type="1" href="javascript:void(0);"  style="background:url(https://mall6.qiyipic.com/mall/20180515/cd/c7/mall_5afabe67f6882e3f377ecdc7_30_30.jpg) center;" th:title="${typeA}" th:data-price="${typeAPrice}" th:data-itemid="${itemid}">-->
+                                                <!--</a>-->
+                                                <!--<i class="icon-choose"></i>-->
+                                            <!--</li>-->
+                                            <!--<li th:if="${typeB}" class="" data-delegate="el" data-par-index="1" data-index="1" data-propval-id="90004373" style="width: 32px;">-->
+                                                <!--<a class="link-choose " data-type="2" href="javascript:void(0);"  style="background:url(https://mall6.qiyipic.com/mall/20180515/cd/c7/mall_5afabe67f6882e3f377ecdc7_30_30.jpg) center;" th:title="${typeB}" th:data-price="${typeBPrice}" th:data-itemid="${itemid}">-->
+                                                <!--</a>-->
+                                                <!--<i class="icon-choose"></i>-->
+                                            <!--</li>-->
+                                            <!--<li th:if="${typeC}" class="" data-delegate="el" data-par-index="1" data-index="2" data-propval-id="90004373" style="width: 32px;">-->
+                                                <!--<a class="link-choose "  data-type="3" href="javascript:void(0);"  style="background:url(https://mall6.qiyipic.com/mall/20180515/cd/c7/mall_5afabe67f6882e3f377ecdc7_30_30.jpg) center;" th:title="${typeC}" th:data-price="${typeCPrice}" th:data-itemid="${itemid}">-->
+                                                <!--</a>-->
+                                                <!--<i class="icon-choose"></i>-->
+                                            <!--</li>-->
+                                        <!--</ul>-->
+                                    <!--</div>-->
+                                <!--</div>-->
 
 
 
@@ -138,11 +137,14 @@
                                 <!-- JD 预售商品TIPs -->
                                 <div class="mt15 ">
 
-                                    <a class="detail-btn detail-btn-buy mr5" id="J_LinkBuy" data-goods-id="" href="https://mall.iqiyi.com/item/19rro522ug#" rseat="1501231_ibuy">
-                                    立即购买
+                                    <a class="detail-btn detail-btn-buy mr5" id="J_LinkBuy" data-goods-id="" href="javascript:void(0);" th:data-itemid="${itemid}">
+                                        专属定制
                                     </a>
-                                    <a class="detail-btn detail-btn-cart" id="J_LinkBasket" href="javascript:void(0);" rseat="1501231_cart">
-                                    <i class="icon-shopping-cart"></i>加入购物车
+                                    <!--<a class="detail-btn detail-btn-buy mr5" id="J_Make" data-goods-id="" href="javascript:void(0);" th:data-itemid="${itemid}">-->
+                                        <!--专属定制-->
+                                    <!--</a>-->
+                                    <a class="detail-btn detail-btn-buy mr5" id="J_Contact" data-goods-id="" href="javascript:void(0);" th:data-itemid="${itemid}">
+                                        联系客服
                                     </a>
                                 </div>
                                 <div class="global_ibuy_tip_outer">
@@ -192,20 +194,22 @@
                                 <!-- 套餐详情  -->
                                 <div class="attributes_list">
                                     <ul class="mod-list_col3 clearfix">
-                                        <li title="试用场景：森林">试用场景：森林</li>
-                                        <li title="开通地区：济南">开通地区：济南</li>
-                                        <li title="价格说明：森林">价格说明：森林</li>
+                                        <li th:title="${activityForm}" th:text="${activityForm}">试用场景：</li>
+                                        <li th:title="${activityPlace}" th:text="${activityPlace}">适用地点：</li>
+                                        <li th:title="${enableArea}" th:text="${enableArea}">开通地区：</li>
                                         <li title="版本选择：基础档，性价比，豪华档">版本选择：基础档，性价比，豪华档</li>
                                     </ul>
                                 </div>
                                 <div class="attributes_imgList">
                                     <!-- 套餐详情图片列表  -->
                                     <div><p style="text-align: center;">
-                                        <img th:src="@{/goodsdetail/mall_5b02c2bcf6882e3f349dd7e1_xxx.jpg}" title="" alt="" >
-                                        <img th:src="@{/goodsdetail/mall_5b02c2bc74d57908d51879fc_xxx.jpg}" title="" alt="" >
-                                        <img th:src="@{/goodsdetail/mall_5b02c2bcd2999d6a977dd48b_xxx.jpg}" title="" alt="" >
-                                        <img th:src="@{/goodsdetail/mall_5b02c2bcf6882e3f387f0c1f_xxx.jpg}" title="" alt="" >
-                                        <img th:src="@{/goodsdetail/mall_5af980f674d57908da89b9bb_xxx.jpg}" title="" alt="" >
+                                        <li th:each="introduceImage:${introduceImages}">
+                                            <img th:src="${introduceImage}" title="" alt="" >
+                                        </li>
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bc74d57908d51879fc_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bcd2999d6a977dd48b_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bcf6882e3f387f0c1f_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5af980f674d57908da89b9bb_xxx.jpg}" title="" alt="" >-->
                                     </p></div>
                                     <div class="bottomPriceTag" style="background-image: url(//www.qiyipic.com/mall/fix/434d62274f7b4fa6b9d432b73c05a463.jpg);width: 960px;height: 384px;"></div>
 
@@ -214,223 +218,44 @@
 
                             <!-- 优势对比 -->
                             <div class="tab_body tab_body-2" id="J_comments-pager" data-tab-con="con" style="display: none;"><!-- 商品评价 -->
-                                <div class="mt20 mb20" data-comments-count="">
-                                    <div class="comment_score_box">
-                                        <ul class="mod-list_col2 clearfix">
-                                            <li class="b_r_line">
-                                                <ul class="mod-list_col2 clearfix p5">
-                                                    <li class="list_col2_sm">
-                                                        <p class="mt10">商品综合满意度</p>
-                                                        <p class="score">100.0%</p>
-                                                    </li>
-                                                    <li class="list_col2_lg">
-                                                        <div class="score_percent_list">
-                                                            <div class="tle">
-                                                                好评(100.0%)
-                                                            </div>
-                                                            <div class="bar">
-                                                                <span class="cur" style="width: 100.0%"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="score_percent_list">
-                                                            <div class="tle">
-                                                                中评(0.0%)
-                                                            </div>
-                                                            <div class="bar">
-                                                                <span class="cur" style="width: 0.0%"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="score_percent_list">
-                                                            <div class="tle">
-                                                                差评(0.0%)
-                                                            </div>
-                                                            <div class="bar">
-                                                                <span class="cur" style="width: 0.0%"></span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <ul class="mod-list_col2 clearfix p5">
-                                                    <li class="list_col2_sm">
-                                                        <p class="mt30 tc">商品综合评分5.0</p>
-                                                    </li>
-                                                    <li class="list_col2_lg">
-                                                        <div class="score_star_list">
-                                                            <div class="tle">
-                                                                商品描述相符度：
-                                                            </div>
-                                                            <div class="star icon-scroe-empty">
-                                                                <span class="icon-scroe-full" style="width:100.0%"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="score_star_list">
-                                                            <div class="tle">
-                                                                商品发货速度：
-                                                            </div>
-                                                            <div class="star icon-scroe-empty">
-                                                                <span class="icon-scroe-full" style="width:100.0%"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="score_star_list">
-                                                            <div class="tle">
-                                                                物流服务：
-                                                            </div>
-                                                            <div class="star icon-scroe-empty">
-                                                                <span class="icon-scroe-full" style="width:100.0%"></span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="comment_filtrate_bar" id="J_comments-filterList-tab">
-                                        <a href="javascript:void(0)" class="filtrate_item selected" data-delegate="cmttype">
-                                            <div class="radioSelect-all">
-                                                <div data-item="selectedInput" class="radio-order radio-order-selected">
-                                                    <input class="radioS" type="checkbox" name="" value="true">
+                                <div class="attributes_imgList">
+                                    <!-- 图片列表  -->
+                                    <div><p style="text-align: center;">
+                                        <!--<li th:each="introduceImage:${introduceImages}">-->
+                                            <!--<img th:src="${introduceImage}" title="" alt="" >-->
+                                        <!--</li>-->
+                                        <li>
+                                        <img src="goodsdetail/20180529233953.jpg" title="" alt="" >
 
-                                                </div>
-                                                <span class="radio_txt">全部评价
+                                    </li>
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bcd2999d6a977dd48b_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bcf6882e3f387f0c1f_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5af980f674d57908da89b9bb_xxx.jpg}" title="" alt="" >-->
+                                        </p></div>
+                                    <div class="bottomPriceTag" style="background-image: url(//www.qiyipic.com/mall/fix/434d62274f7b4fa6b9d432b73c05a463.jpg);width: 960px;height: 384px;"></div>
 
-										（1）
-									</span>
-                                            </div>
-                                        </a>
-                                        <a href="javascript:void(0)" class="filtrate_item " data-delegate="cmttype" data-comments-cmttype="50">
-                                            <div class="radioSelect-all">
-                                                <div data-item="selectedInput" class="radio-order ">
-                                                    <input class="radioS" type="checkbox" name="" value="true">
-
-                                                </div>
-                                                <span class="radio_txt">好评
-
-										（1）
-									</span>
-                                            </div>
-                                        </a>
-                                        <a href="javascript:void(0)" class="filtrate_item " data-delegate="cmttype" data-comments-cmttype="52">
-                                            <div class="radioSelect-all">
-                                                <div data-item="selectedInput" class="radio-order ">
-                                                    <input class="radioS" type="checkbox" name="" value="true">
-
-                                                </div>
-                                                <span class="radio_txt">中评（0）</span>
-                                            </div>
-                                        </a>
-                                        <a href="javascript:void(0)" class="filtrate_item " data-delegate="cmttype" data-comments-cmttype="51">
-                                            <div class="radioSelect-all">
-                                                <div data-item="selectedInput" class="radio-order ">
-                                                    <input class="radioS" type="checkbox" name="" value="true">
-
-                                                </div>
-                                                <span class="radio_txt">差评（0）</span>
-                                            </div>
-                                        </a>
-                                        <a href="javascript:void(0)" class="filtrate_item " data-delegate="cmttype" data-comments-cmttype="333">
-                                            <div class="radioSelect-all">
-                                                <div data-item="selectedInput" class="radio-order ">
-                                                    <input class="radioS" type="checkbox" name="" value="true">
-
-                                                </div>
-                                                <span class="radio_txt">图片（1）</span>
-                                            </div>
-                                        </a>
-                                        <!-- <a href="javascript:void(0);"  class="filtrate_item selected" data-delegate='cmttype'>全部评价（1）<i class="filtrate_tr"></i></a>
-                                        <a href="javascript:void(0);" class="filtrate_item " data-delegate='cmttype' data-comments-cmttype="50">好评（1）<i class="filtrate_tr"></i></a>
-                                        <a href="javascript:void(0);" class="filtrate_item " data-delegate='cmttype' data-comments-cmttype="52">中评（0）<i class="filtrate_tr"></i></a>
-                                        <a href="javascript:void(0);" class="filtrate_item " data-delegate='cmttype' data-comments-cmttype="51">差评（0）<i class="filtrate_tr"></i></a> -->
-                                        <div class="detail_pj">
-                                            <div class="select-all">
-                                                <div class="checkBox-order checkBox-order-selected" data-delegate="hideEmpty" data-selectedclass="checkBox-order-selected">
-                                                    <input class="checkBox" type="checkbox" name="" value="">
-
-                                                </div>
-                                                <span class="tx">有内容</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="J_comments-list">
-                                        <div class="comment_list">
-                                            <!-- <div class="mod-media">
-                                                <a class="media_hd">
-                                                    <img class="media-object" src="" alt="..." width="60" height="60">
-                                                </a>
-                                                <div class="media_bd">
-                                                    <h4 class="media-tle">
-                                                        <p class="fr">
-                                                            <span class="date"></span>
-                                                            <span class="time"></span>
-                                                        </p>
-                                                        <span class="buy_name">
-                                                            </span>
-                                                    </h4>
-                                                    <div class="media-item">
-                                                        <p></p>
-                                                        <p class="goods_des">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                            <div class="grid_main">
-                                                <table class="grid_table" width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                    <tbody><tr>
-                                                        <td class="grid_Info last">
-                                                            <div class="grid_txt">刚收到货，好开心，丞丞的味道，很好闻，项链很好看，有丞星两个字，好感动，链子有点长，在哪里可以裁？</div>
-                                                            <div class="tm_photos" data-item="showImgs">
-                                                                <ul class="tm_photosUl clearfix">
-                                                                    <li data-index="0" j-delegate="img">
-                                                                        <img th:src="@{/goodsdetail/mall_5b03af7df6882e3f39834900_1x1.jpg}">
-                                                                        <i class="tm_photos_arrow"></i>
-                                                                    </li>
-                                                                    <li data-index="1" j-delegate="img">
-                                                                        <img th:src="@{/goodsdetail/mall_5b03af8614d45572175734fa_1x1.jpg}">
-                                                                        <i class="tm_photos_arrow"></i>
-                                                                    </li>
-                                                                    <li data-index="2" j-delegate="img">
-                                                                        <img th:src="@{/goodsdetail/mall_5b03af91f6882e3f355643b3_1x1.jpg}">
-                                                                        <i class="tm_photos_arrow"></i>
-                                                                    </li>
-                                                                </ul>
-                                                                <div class="photo_viewer dn" j-delegate="bigImgBox">
-                                                                    <span class="photo_viewerBox"><img src="https://mall.iqiyi.com/item/19rro522ug" data-item="bigImg"></span>
-                                                                    <a class="photo_viewer_navleft dn" j-delegate="arrowLeft">
-                                                                        <i class="photo_viewer_navicon"></i>
-                                                                    </a>
-                                                                    <a class="photo_viewer_navright dn" j-delegate="arrowRight">
-                                                                        <i class="photo_viewer_navicon"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <p class="grid_time"><span class="mr10">2018-5-22</span><span>13:51:56</span></p>
-                                                        </td>
-                                                        <td class="grid_colS last">
-                                                            <div class="goods_des">
-                                                                <p class="color">颜色分类: <span>签名版香水+【丞星专享】钻石项链</span></p>
-                                                                <p class="color">净含量: <span>50mL</span></p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="grid_cen last">
-                                                            <p class="grid_imgBox"><img th:src="@{/goodsdetail/passport_1529929230_152084003489545_130_130.jpg}" width="50" height="50"></p>
-                                                            <p class="buy_title"><span class="buy_name">T***4</span></p>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody></table>
-                                            </div>
-
-                                            <!-- 分页 页数需要动态计算 分页组件上的参数（delegate、url、style等等）需要实时生成 -->
-                                            <div class="mod-page mt20 pb20">
-                                                <ul class="page">
-                                                </ul>
-                                            </div></div>
-                                    </div>
                                 </div>
                             </div>
 
                             <!-- 服务流程 -->
                             <div class="tab_body tab_body-3" id="J_record-pager" data-tab-con="con" style="display: none;" >
+                                <div class="attributes_imgList">
+                                    <!-- 图片列表  -->
+                                    <div><p style="text-align: center;">
+                                        <!--<li th:each="introduceImage:${introduceImages}">-->
+                                        <!--<img th:src="${introduceImage}" title="" alt="" >-->
+                                        <!--</li>-->
+                                        <li>
+                                            <img src="goodsdetail/web-service-steps.png" title="" alt="" >
+
+                                        </li>
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bcd2999d6a977dd48b_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5b02c2bcf6882e3f387f0c1f_xxx.jpg}" title="" alt="" >-->
+                                        <!--<img th:src="@{/goodsdetail/mall_5af980f674d57908da89b9bb_xxx.jpg}" title="" alt="" >-->
+                                        </p></div>
+                                    <div class="bottomPriceTag" style="background-image: url(//www.qiyipic.com/mall/fix/434d62274f7b4fa6b9d432b73c05a463.jpg);width: 960px;height: 384px;"></div>
+
+                                </div>
                             </div>
 
                             <!-- 疑难解答 -->
@@ -439,88 +264,88 @@
                                     <div class="detail_service_upper">
                                         <img class="service_qrCode" th:src="@{/goodsdetail/iqiyi_mall_num.jpg}">
                                         <div class="product_service_upper_R">
-                                            <p class="service_line">本商家商品保证正品行货</p>
-                                            <p class="service_line">严格按照国家三包政策提供售后服务</p>
-                                            <p class="service_line">关注爱奇艺商城微信服务号 (微信号iqiyistore)</p>
+                                            <p class="service_line">本套餐保证不进行任何欺诈</p>
+                                            <p class="service_line">严格按照国家政策提供售后服务</p>
+                                            <p class="service_line">关注微信服务号 (微信号xxxxxx)</p>
                                             <p class="service_line">获取更多售后服务支持</p>
                                         </div>
                                     </div>
 
                                     <div class="detail_service_down">
-                                        <span class="detail_service_down_title">爱奇艺商城服务承诺：</span>
+                                        <span class="detail_service_down_title">服务承诺：</span>
                                         <!-- 正品保障 -->
                                         <div class="detail_service_down_box">
                                             <img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_03.png}">
                                             <div class="service_down_box_R">
-                                                <span class="service_down_box_R_title">正品保障</span>
+                                                <span class="service_down_box_R_title">服务保障</span>
                                                 <ul class="service_down_box_R_ul">
-                                                    <li>• 第三方商家保证消费者购买其在爱奇艺商城所售的商品为“正品”，即非“假冒（包括盗版）品牌”商品、“未经报关”的进口商品、“假冒材质成分“商品</li>
+                                                    <li>我们所有服务均是经由大量经验总结而来，全国各地都有婚礼策划分公司，值得信赖！</li>
                                                 </ul>
                                             </div>
                                         </div>
 
                                         <!-- 特卖包邮 -->
-                                        <div class="detail_service_down_box">
-                                            <img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_06.png}">
-                                            <div class="service_down_box_R">
-                                                <span class="service_down_box_R_title">特卖包邮</span>
-                                                <ul class="service_down_box_R_ul">
-                                                    <li>• 爱奇艺商城第三方商家支持商品包邮政策，但会跟不同地区不同的促销方式收取一定的运费，具体请以实际提交订单展示为准。</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        <!--<div class="detail_service_down_box">-->
+                                            <!--<img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_06.png}">-->
+                                            <!--<div class="service_down_box_R">-->
+                                                <!--<span class="service_down_box_R_title">特卖包邮</span>-->
+                                                <!--<ul class="service_down_box_R_ul">-->
+                                                    <!--<li>• 爱奇艺商城第三方商家支持商品包邮政策，但会跟不同地区不同的促销方式收取一定的运费，具体请以实际提交订单展示为准。</li>-->
+                                                <!--</ul>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
                                         <!-- 48小时发货 -->
-                                        <div class="detail_service_down_box">
-                                            <img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_08.png}">
-                                            <div class="service_down_box_R">
-                                                <span class="service_down_box_R_title">48小时发货</span>
-                                                <ul class="service_down_box_R_ul">
-                                                    <li>• 消费者通过爱奇艺商城完成付款下单成功后，第三方商家将在48小时内发送买家所购实物商品。不可抗力因素以及定制、预售等特殊类目及特殊情况除外；<br>特殊情况请以公告和商品说明为准。
-                                                    </li>
-                                                </ul>
-                                                <div class="service_down_box_R_add">
-                                                    <span class="service_down_box_R_add_title">特殊情形需要另行约定发货时间的包括但不限于以下情形： </span>
-                                                    <span>（一）属于爱奇艺商城特殊类目的商品：</span>
-                                                    <span>&nbsp;1、爱奇艺商城第三方商家所销售需由港澳台&amp;海外发货的商品；</span>
-                                                    <span>&nbsp;2、爱奇艺商城第三方商家所销售的冰箱、空调、洗衣机、液晶电视、油烟机、燃气灶、消毒柜类目的商品；</span>
-                                                    <span>（二）爱奇艺官方组织的促销活动、爱奇艺市场组织的活动等对参加活动商家的发货时间有特殊约定的，此时发货时间需遵从相关活动规定。</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <!--<div class="detail_service_down_box">-->
+                                            <!--<img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_08.png}">-->
+                                            <!--<div class="service_down_box_R">-->
+                                                <!--<span class="service_down_box_R_title">48小时发货</span>-->
+                                                <!--<ul class="service_down_box_R_ul">-->
+                                                    <!--<li>• 消费者通过爱奇艺商城完成付款下单成功后，第三方商家将在48小时内发送买家所购实物商品。不可抗力因素以及定制、预售等特殊类目及特殊情况除外；<br>特殊情况请以公告和商品说明为准。-->
+                                                    <!--</li>-->
+                                                <!--</ul>-->
+                                                <!--<div class="service_down_box_R_add">-->
+                                                    <!--<span class="service_down_box_R_add_title">特殊情形需要另行约定发货时间的包括但不限于以下情形： </span>-->
+                                                    <!--<span>（一）属于爱奇艺商城特殊类目的商品：</span>-->
+                                                    <!--<span>&nbsp;1、爱奇艺商城第三方商家所销售需由港澳台&amp;海外发货的商品；</span>-->
+                                                    <!--<span>&nbsp;2、爱奇艺商城第三方商家所销售的冰箱、空调、洗衣机、液晶电视、油烟机、燃气灶、消毒柜类目的商品；</span>-->
+                                                    <!--<span>（二）爱奇艺官方组织的促销活动、爱奇艺市场组织的活动等对参加活动商家的发货时间有特殊约定的，此时发货时间需遵从相关活动规定。</span>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
                                         <!-- 7天无理由退货 -->
-                                        <div class="detail_service_down_box">
-                                            <img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_10.png}">
-                                            <div class="service_down_box_R">
-                                                <span class="service_down_box_R_title">7天无理由退换货</span>
-                                                <ul class="service_down_box_R_ul">
-                                                    <li>• 在符合相关法律法规以及平台规范的情况下，消费者签收实物商品后7天内（按照物流签收后的第二天零时起计算时间），可以发起“7天退货”申请。<br>（需满足7天无理由退换货申请条件，且部分商品、类目及特殊情况除外；特殊情况请以公告和商品说明为准）；
-                                                    </li>
-                                                    <li>• “7天退货”申请金额仅以买家实际支付的商品价款为限；</li>
-                                                    <li>• 买家所退商品需完好，且不得影响商家的二次销售。</li>
-                                                </ul>
-                                                <div class="service_down_box_R_add">
-                                                    <span class="service_down_box_R_add_title">爱奇艺商城7天无理由退换货服务规范：</span>
-                                                    <span class="mt5">（一）以下商品根据其商品品质不参与“7天无理由退换货”服务：</span>
-                                                    <span>1.食品饮料、保健食品类商品；</span>
-                                                    <span>2.母婴用品、婴儿食品、贴身衣物类商品；</span>
-                                                    <span>3.美妆、个人洗护、卫生安全类特殊商品(如卫生巾、成人性用品) ；</span>
-                                                    <span>4.钟表、珠宝、首饰等包含贵重金属商品（商品详情页“服务承诺”中若展现“7天放心退”标识的商品，则可以且仅支持7天无理由退货）；</span>
-                                                    <span>5.爱奇艺VIP卡等虚拟类的充值卡；</span>
-                                                    <span>6.数字阅读、数字娱乐；</span>
-                                                    <span>7.内裤、丝袜、美腿袜等贴身商品。</span>
+                                        <!--<div class="detail_service_down_box">-->
+                                            <!--<img class="service_down_box_image" th:src="@{/goodsdetail/goodDet0627_10.png}">-->
+                                            <!--<div class="service_down_box_R">-->
+                                                <!--<span class="service_down_box_R_title">7天无理由退换货</span>-->
+                                                <!--<ul class="service_down_box_R_ul">-->
+                                                    <!--<li>• 在符合相关法律法规以及平台规范的情况下，消费者签收实物商品后7天内（按照物流签收后的第二天零时起计算时间），可以发起“7天退货”申请。<br>（需满足7天无理由退换货申请条件，且部分商品、类目及特殊情况除外；特殊情况请以公告和商品说明为准）；-->
+                                                    <!--</li>-->
+                                                    <!--<li>• “7天退货”申请金额仅以买家实际支付的商品价款为限；</li>-->
+                                                    <!--<li>• 买家所退商品需完好，且不得影响商家的二次销售。</li>-->
+                                                <!--</ul>-->
+                                                <!--<div class="service_down_box_R_add">-->
+                                                    <!--<span class="service_down_box_R_add_title">爱奇艺商城7天无理由退换货服务规范：</span>-->
+                                                    <!--<span class="mt5">（一）以下商品根据其商品品质不参与“7天无理由退换货”服务：</span>-->
+                                                    <!--<span>1.食品饮料、保健食品类商品；</span>-->
+                                                    <!--<span>2.母婴用品、婴儿食品、贴身衣物类商品；</span>-->
+                                                    <!--<span>3.美妆、个人洗护、卫生安全类特殊商品(如卫生巾、成人性用品) ；</span>-->
+                                                    <!--<span>4.钟表、珠宝、首饰等包含贵重金属商品（商品详情页“服务承诺”中若展现“7天放心退”标识的商品，则可以且仅支持7天无理由退货）；</span>-->
+                                                    <!--<span>5.爱奇艺VIP卡等虚拟类的充值卡；</span>-->
+                                                    <!--<span>6.数字阅读、数字娱乐；</span>-->
+                                                    <!--<span>7.内裤、丝袜、美腿袜等贴身商品。</span>-->
 
-                                                    <span class="mt5">（二）以下情况不予办理退货：</span>
-                                                    <span>1.含防伪码商品，防伪码涂层一经刮开或涂改不予退货；含防伪标签商品，防伪标签一经撕损或改动不予退货； 3C数码类产品序列号与出库商品不一致不<br>予退货；以及其他无法判断是否由爱奇艺商城售出的商品不予退货；</span>
-                                                    <span>2.商品页面明确告知属临保商品的不予退货；</span>
-                                                    <span>3.因客户擅自改动商品导致的质量问题不予退货；</span>
-                                                    <span>4.附件、保修卡等缺失或无法与主品匹配的商品不予退货；</span>
-                                                    <span>5.其他依据法律或本规则细则规定不支持退货的商品不予退货。</span>
+                                                    <!--<span class="mt5">（二）以下情况不予办理退货：</span>-->
+                                                    <!--<span>1.含防伪码商品，防伪码涂层一经刮开或涂改不予退货；含防伪标签商品，防伪标签一经撕损或改动不予退货； 3C数码类产品序列号与出库商品不一致不<br>予退货；以及其他无法判断是否由爱奇艺商城售出的商品不予退货；</span>-->
+                                                    <!--<span>2.商品页面明确告知属临保商品的不予退货；</span>-->
+                                                    <!--<span>3.因客户擅自改动商品导致的质量问题不予退货；</span>-->
+                                                    <!--<span>4.附件、保修卡等缺失或无法与主品匹配的商品不予退货；</span>-->
+                                                    <!--<span>5.其他依据法律或本规则细则规定不支持退货的商品不予退货。</span>-->
 
-                                                </div>
-                                            </div>
-                                        </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -539,30 +364,16 @@
                         <div class="detail_recomUlB" data-elem="recommendWrapper">
                             <ul class="detail_recommendUl" data-elem="recommendList" style="position: relative; top: 0px;">
                                 <li data-qiyupingback-type="recctplay20121226" data-qiyupingback-usract="show" data-qiyupingback-aid="393480324" data-qiyupingback-eventid="2084fdd8fcdd91dd42fdf6b0bb730581" data-qiyupingback-bkt="cow_main" data-qiyupingback-area="cow" data-qiyupingback-rectype="GOODS" data-qiyupingback-taid="364539824" data-qiyupingback-rank="0" j-delegate="sendQiyuPingback" rseat="mall_dp_C_recommend_1">
-                                    <a class="detail_recom_link" href="https://mall.iqiyi.com/item/19rrnssg64" target="_blank" rseat="mall_dp_C_recommend_1"><img th:src="@{/goodsdetail/mall2_5aac07b274d5796d2bb65925_180_180.jpg}" rseat="mall_dp_C_recommend_1"></a>
-                                    <a class="detail_recom_linkInfo" title="雾仙浓(Moschino)嬉皮风格女士香水 50ml" href="https://mall.iqiyi.com/item/19rrnssg64" target="_blank" rseat="mall_dp_C_recommend_1">雾仙浓(Moschino)嬉皮风格女士香水 50ml</a>
-                                    <p class="detail_recom_price">¥279</p>
+                                    <a class="detail_recom_link" href="/goodsdetail.html?itemid=1" target="_blank" rseat="mall_dp_C_recommend_1"><img src="/goodsdetail/2016090517.jpg" rseat="mall_dp_C_recommend_1"></a>
+                                    <a class="detail_recom_linkInfo" title="「灯海」灯海浪漫求婚套餐" href="/goodsdetail.html?itemid=1" target="_blank" rseat="mall_dp_C_recommend_1">「灯海」灯海浪漫求婚套餐</a>
+                                    <p class="detail_recom_price">¥11000</p>
                                 </li>
-                                <li data-qiyupingback-type="recctplay20121226" data-qiyupingback-usract="show" data-qiyupingback-aid="393480324" data-qiyupingback-eventid="2084fdd8fcdd91dd42fdf6b0bb730581" data-qiyupingback-bkt="cow_main" data-qiyupingback-area="cow" data-qiyupingback-rectype="GOODS" data-qiyupingback-taid="347954024" data-qiyupingback-rank="1" j-delegate="sendQiyuPingback" rseat="mall_dp_C_recommend_2">
-                                    <a class="detail_recom_link" href="https://mall.iqiyi.com/item/19rro2tq84" target="_blank" rseat="mall_dp_C_recommend_2"><img th:src="@{/goodsdetail/mall_59bf372214d4556197907599_180_180.jpg}" rseat="mall_dp_C_recommend_2"></a>
-                                    <a class="detail_recom_linkInfo" title="玛莉吉亚（MALIZIA）棒棒糖香水-甜心50ml  (进口香水 女士香水）" href="https://mall.iqiyi.com/item/19rro2tq84" target="_blank" rseat="mall_dp_C_recommend_2">玛莉吉亚（MALIZIA）棒棒糖香水-甜心50ml  (进口香水 女士香水）</a>
-                                    <p class="detail_recom_price">¥78</p>
-                                </li>
-                                <li data-qiyupingback-type="recctplay20121226" data-qiyupingback-usract="show" data-qiyupingback-aid="393480324" data-qiyupingback-eventid="2084fdd8fcdd91dd42fdf6b0bb730581" data-qiyupingback-bkt="cow_main" data-qiyupingback-area="cow" data-qiyupingback-rectype="GOODS" data-qiyupingback-taid="364642524" data-qiyupingback-rank="2" j-delegate="sendQiyuPingback" rseat="mall_dp_C_recommend_3">
-                                    <a class="detail_recom_link" href="https://mall.iqiyi.com/item/19rrnsvs1c" target="_blank" rseat="mall_dp_C_recommend_3"><img th:src="@{/goodsdetail/mall_59f6bdccf6882e60af279498_180_180.jpg}" rseat="mall_dp_C_recommend_3"></a>
-                                    <a class="detail_recom_linkInfo" title="冰希黎（Boitown） 浪漫天使女士香水50ML" href="https://mall.iqiyi.com/item/19rrnsvs1c" target="_blank" rseat="mall_dp_C_recommend_3">冰希黎（Boitown） 浪漫天使女士香水50ML</a>
-                                    <p class="detail_recom_price">¥182</p>
-                                </li>
-                                <li data-qiyupingback-type="recctplay20121226" data-qiyupingback-usract="show" data-qiyupingback-aid="393480324" data-qiyupingback-eventid="2084fdd8fcdd91dd42fdf6b0bb730581" data-qiyupingback-bkt="cow_main" data-qiyupingback-area="cow" data-qiyupingback-rectype="GOODS" data-qiyupingback-taid="364642424" data-qiyupingback-rank="3" j-delegate="sendQiyuPingback" rseat="mall_dp_C_recommend_4">
-                                    <a class="detail_recom_link" href="https://mall.iqiyi.com/item/19rrnsvrx0" target="_blank" rseat="mall_dp_C_recommend_4"><img th:src="@{/goodsdetail/mall_59f6bdc674d5792e74b15b2b_180_180.jpg}" rseat="mall_dp_C_recommend_4"></a>
-                                    <a class="detail_recom_linkInfo" title="冰希黎（Boitown）清泉男士香水50ml" href="https://mall.iqiyi.com/item/19rrnsvrx0" target="_blank" rseat="mall_dp_C_recommend_4">冰希黎（Boitown）清泉男士香水50ml</a>
-                                    <p class="detail_recom_price">¥98</p>
-                                </li>
-                                <li data-qiyupingback-type="recctplay20121226" data-qiyupingback-usract="show" data-qiyupingback-aid="393480324" data-qiyupingback-eventid="2084fdd8fcdd91dd42fdf6b0bb730581" data-qiyupingback-bkt="cow_main" data-qiyupingback-area="cow" data-qiyupingback-rectype="GOODS" data-qiyupingback-taid="347983724" data-qiyupingback-rank="4" j-delegate="sendQiyuPingback" rseat="mall_dp_C_recommend_5">
-                                    <a class="detail_recom_link" href="https://mall.iqiyi.com/item/19rro2ubk0" target="_blank" rseat="mall_dp_C_recommend_5"><img th:src="@{/goodsdetail/mall_59bf717214d4556195f30baa_180_180.jpg}" rseat="mall_dp_C_recommend_5"></a>
-                                    <a class="detail_recom_linkInfo" title="冰希黎(Boitown)境界50ml 男士香水" href="https://mall.iqiyi.com/item/19rro2ubk0" target="_blank" rseat="mall_dp_C_recommend_5">冰希黎(Boitown)境界50ml 男士香水</a>
-                                    <p class="detail_recom_price">¥98</p>
-                                </li>
+                                <!--<li data-qiyupingback-type="recctplay20121226" data-qiyupingback-usract="show" data-qiyupingback-aid="393480324" data-qiyupingback-eventid="2084fdd8fcdd91dd42fdf6b0bb730581" data-qiyupingback-bkt="cow_main" data-qiyupingback-area="cow" data-qiyupingback-rectype="GOODS" data-qiyupingback-taid="347954024" data-qiyupingback-rank="1" j-delegate="sendQiyuPingback" rseat="mall_dp_C_recommend_2">-->
+                                    <!--<a class="detail_recom_link" href="/goodsdetail.html?itemid=1" target="_blank" rseat="mall_dp_C_recommend_2"><img th:src="@{/goodsdetail/mall_59bf372214d4556197907599_180_180.jpg}" rseat="mall_dp_C_recommend_2"></a>-->
+                                    <!--<a class="detail_recom_linkInfo" title="秘境之林" href="/goodsdetail.html?itemid=1" target="_blank" rseat="mall_dp_C_recommend_2">秘境之林</a>-->
+                                    <!--<p class="detail_recom_price">¥78</p>-->
+                                <!--</li>-->
+
                             </ul>
                         </div>
 
@@ -579,7 +390,8 @@
     </div>
 </div>
 <!-- end main -->
-<script>$('.tabTle-item').click(function(){
+<script>
+    $('.tabTle-item').click(function(){
     if($(this).attr('data-menuindex')=="0"){
         $("li.tabTle-item.selected").attr("class","tabTle-item");
         $(this).attr("class","tabTle-item selected");
@@ -603,16 +415,45 @@
         $(this).attr("class","tabTle-item selected");
         $("div[data-tab-con='con']").css("display","none");
         $("#J_service-pager").css("display","block");
-    }
-    // alert($(this).attr('id'));
+    }});
+    $(".link-choose").click(function () {
+        $(".link-choose").parent().removeAttr("class");
+        $(this).parent().attr("class","selected");
+        $("#J_new-price").text($(this).attr("data-price"));
+    })
+    $("#J_LinkBuy").click(function (){
 
-    //alert($(e.target).attr('id'));
-});</script>
-<script>function imgclick(event) {
+        $.post("/submitItem",
+            {
+                itemid:$(this).attr("data-itemid")
+            },
+            function(data,status){
+                // alert("数据：" + data + "\n状态：" + status);
+                submitItem(data);
+            });
+    })
+</script>
+<script>
+    function imgclick(event) {
     $("img[data-img='1']").parent().removeAttr("class");
     $(event.target).parent().attr("class","selected");
     $("#J_magnifier-smallImg").attr("src",$(event.target).attr("src"));
     // console.log($(event.target).attr("src"));
-}</script>
-<script></script>
+    }
+    function submitItem(data) {
+        // alert(data);
+        var responseData=$.parseJSON(data);
+        console.log(responseData);
+        if(responseData["isLogin"]=="false"){
+            window.location.href="login"+"?redirectURL="+"goodsdetail?itemid="+responseData["redirectItemid"];
+        }else {
+            window.location.href="submitform"+"?itemid="+responseData["redirectItemid"];
+        }
+
+    }
+</script>
+<script>
+    $("#J_magnifier-smallImg").attr("src",$("ul.thumbnail-list.clearfix li:first img").attr("src"));
+    $("ul.thumbnail-list.clearfix li:first").css("class","selected");
+</script>
 </body></html>

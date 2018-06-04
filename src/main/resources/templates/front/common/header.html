@@ -32,8 +32,8 @@
                                 <li><a th:href="@{/index}" href="../index.html">首页</a></li>
                                 <!--<li><a th:href="@{/search}" href="../search.html">专属定制</a></li>-->
                                 <!--<li><a th:href="@{/vip}" href="../vip.html">服务套餐</a></li>-->
-                                <li><a th:href="@{/search}">专属定制</a></li>
-                                <li><a th:href="@{/search}">服务套餐</a></li>
+                                <li><a th:href="@{/search}">专属定制&服务套餐</a></li>
+                                <!--<li><a th:href="@{/search}">服务套餐</a></li>-->
                                 <li><a th:href="@{/success_story}" href="../success_story.html">真实案例</a></li>
                                 <li><a th:href="@{/other_says}" href="../other_says.html">浪漫攻略</a></li>
                                 <li th:if="${session.user}==null"><a th:href="@{/login}" href="../login.html">登录</a></li>
@@ -57,7 +57,7 @@
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a th:href="@{/usercenter}" href="../login.html">编辑资料</a></li>
-                                        <li><a th:href="@{/usercenter(type='identity')}" href="../register.html">身份认证</a></li>
+                                        <li><a th:href="@{/usercenter(type='myorder')}" href="../myorder.html">我的订单</a></li>
                                         <li><a th:href="@{/usercenter(type='setting')}" href="../index.html">修改密码</a></li>
                                         <li><a th:href="@{/logout}" href="../index.html">退出</a></li>
                                     </ul>

@@ -1,8 +1,29 @@
 package com.hpe.findlover.model;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Image {
+    public static List<String> getNotNullValue(Image e){
+        List<String> imageList=new ArrayList<>();
+        try {
+            Class cls = e.getClass();
+            Field[] fields = cls.getDeclaredFields();
+            for(int i=1; i<fields.length; i++){
+                Field f = fields[i];
+                f.setAccessible(true);
+                if(!(f.get(e)==null)){
+                    imageList.add((String) f.get(e));
+                }
+    //            System.out.println("属性名:" + f.getName() + " 属性值:" + f.get(e));
+            }
+        }catch (Exception a){
+            a.printStackTrace();
+        }
+        return imageList;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

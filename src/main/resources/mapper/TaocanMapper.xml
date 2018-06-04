@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hpe.findlover.mapper.TaocanMapper">
+  <resultMap id="BaseResultMap" type="com.hpe.findlover.model.Taocan">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="taocan_id" jdbcType="INTEGER" property="taocanId" />
+    <result column="search_display_image" jdbcType="VARCHAR" property="searchDisplayImage" />
+    <result column="display_image_id" jdbcType="INTEGER" property="displayImageId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="low_price" jdbcType="INTEGER" property="lowPrice" />
+    <result column="high_price" jdbcType="INTEGER" property="highPrice" />
+    <result column="activity_form" jdbcType="VARCHAR" property="activityForm" />
+    <result column="activity_place" jdbcType="VARCHAR" property="activityPlace" />
+    <result column="enable_area" jdbcType="VARCHAR" property="enableArea" />
+    <result column="taocan_type_a" jdbcType="VARCHAR" property="taocanTypeA" />
+    <result column="taocan_type_a_price" jdbcType="INTEGER" property="taocanTypeAPrice" />
+    <result column="taocan_type_b" jdbcType="VARCHAR" property="taocanTypeB" />
+    <result column="taocan_type_b_price" jdbcType="INTEGER" property="taocanTypeBPrice" />
+    <result column="taocan_type_c" jdbcType="VARCHAR" property="taocanTypeC" />
+    <result column="taocan_type_c_price" jdbcType="INTEGER" property="taocanTypeCPrice" />
+    <result column="introduce_image_id" jdbcType="INTEGER" property="introduceImageId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    taocan_id, search_display_image, display_image_id, title, introduce, low_price, high_price, 
+    activity_form, activity_place, enable_area, taocan_type_a, taocan_type_a_price, taocan_type_b, 
+    taocan_type_b_price, taocan_type_c, taocan_type_c_price, introduce_image_id
+  </sql>
+
+    <select id="selectBySearchCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM taocan WHERE 1=1
+        <if test="activityForm != null">
+            and activity_form LIKE "%"#{activityForm,jdbcType = VARCHAR}"%"
+        </if>
+        <if test="activityPlace != null">
+            and activity_place LIKE "%"#{activityPlace,jdbcType = VARCHAR}"%"
+        </if>
+        <if test="lowPrice != null">
+            and high_price &gt;= #{lowPrice,jdbcType = INTEGER}
+        </if>
+        <if test="highPrice != null">
+            and low_price &lt;= #{highPrice,jdbcType = INTEGER}
+        </if>
+
+    </select>
+</mapper>

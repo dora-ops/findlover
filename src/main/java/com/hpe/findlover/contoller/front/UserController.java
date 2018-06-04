@@ -1,13 +1,15 @@
 package com.hpe.findlover.contoller.front;
 
-import com.hpe.findlover.model.UserBasic;
-import com.hpe.findlover.model.UserPick;
-import com.hpe.findlover.service.LabelService;
-import com.hpe.findlover.service.UserLabelService;
-import com.hpe.findlover.service.UserPickService;
-import com.hpe.findlover.service.UserService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.hpe.findlover.model.*;
+import com.hpe.findlover.service.*;
 import com.hpe.findlover.token.CustomToken;
-import com.hpe.findlover.util.*;
+import com.hpe.findlover.util.Constant;
+import com.hpe.findlover.util.Identity;
+import com.hpe.findlover.util.SessionUtils;
+import com.hpe.findlover.util.ShiroHelper;
+import net.sf.json.JSONArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -17,9 +19,11 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +32,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.UUID;
-import org.apache.shiro.web.util.WebUtils;
+import java.util.*;
+
 /**
  * @author sinnamm
  * @Date 2017-10-16
@@ -42,20 +44,178 @@ public class UserController {
 	private Logger logger = LogManager.getLogger(UserController.class);
 
 	@Autowired
-	UserService userService;
+    private ImageService imageService;
+    @Autowired
+    private TaocanService taocanService;
+    @Autowired
+    private UserOrderService userOrderService;
 	@Autowired
-	UserPickService userPickService;
+	private UserService userService;
 	@Autowired
-	UserLabelService userLabelService;
+    private UserPickService userPickService;
 	@Autowired
-	LabelService labelService;
-	@GetMapping("goodsdetail")
-	public String goodsDetail(){
+    private UserLabelService userLabelService;
+	@Autowired
+    private LabelService labelService;
+	@RequestMapping("about")
+    public String about(){
+	    return "front/about";
+    }
+	@PostMapping("queryOrder")
+    @ResponseBody
+    public String queryOrder(@RequestParam("startData") String startData,@RequestParam("endData") String endData,HttpSession httpSession){
+        UserBasic userBasic=(UserBasic) httpSession.getAttribute("user");
+        if(userBasic==null){
+            return "{\"state\":\"false\"}";
+        }
+        System.out.println(startData+endData);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date data1=null;
+        try {
+            data1 = format.parse(startData);
+        }catch (Exception e){
+        }
+        Date date2=null;
+        try {
+            date2=format.parse(endData);
+        }catch (Exception e){
+        }
+//        if(data1==null||date2==null){
+//            return "{\"state\":\"false\"}";
+//        }
+//        Calendar calendar1=Calendar.getInstance();
+//        calendar1.add(Calendar.HOUR_OF_DAY,-10);
+//        Calendar calendar2=Calendar.getInstance();
+        List<UserOrder> userOrders=userOrderService.selectByTime(data1,date2,userBasic.getId());
+
+        System.out.println("userOrders.size()"+userOrders.size());
+        JSONObject itemJSONObj=new JSONObject();
+        JSONArray jsonArray=new JSONArray();
+        itemJSONObj.put("state","success");
+        for(UserOrder userOrder:userOrders){
+            JSONObject tempJSONObj = JSONObject.parseObject(JSON.toJSONString(userOrder));
+            jsonArray.add(tempJSONObj);
+        }
+        itemJSONObj.put("data",jsonArray.toString());
+        System.out.println(itemJSONObj.toString());
+        return itemJSONObj.toString();
+	}
+	@GetMapping("myorder")
+    public String myOrder(){
+        return "back/user/myorder";
+    }
+	@PostMapping("order")
+    @ResponseBody
+    public String generateOrder(UserOrder order,HttpSession httpSession){
+	    UserBasic userBasic=(UserBasic) httpSession.getAttribute("user");
+        order.setUserId(userBasic.getId());
+        order.setState(0);
+        Calendar calendar=Calendar.getInstance();
+        order.setOrderTime(calendar.getTime());
+        Taocan taocan=taocanService.selectByPrimaryKey(order.getTaocanId());
+        if(order.getVersionId()==1){
+            order.setTotalPrice(taocan.getTaocanTypeAPrice());
+        }
+        if(order.getVersionId()==2){
+            order.setTotalPrice(taocan.getTaocanTypeBPrice());
+        }
+        if(order.getVersionId()==3){
+            order.setTotalPrice(taocan.getTaocanTypeCPrice());
+        }
+        order.setPrepayPrice(order.getTotalPrice()/2);
+        order.setPaidPrice(0);
+        order.setNotPayPrice(order.getTotalPrice());
+        Boolean b =userOrderService.insertSelective(order);
+        if(!b){
+            return "{\"state\":\"false\"}";
+        }
+        Map<String,String> param=new HashMap<>();
+        param.put("state","success");
+        param.put("url","/images/wechatPay.jpg");
+	    return JSONObject.parseObject(JSON.toJSONString(param)).toString();
+    }
+	@RequestMapping("goodsdetail")
+	public String goodsDetail(@RequestParam("itemid") String itemid,ModelMap model,HttpSession httpSession){
+        System.out.println(httpSession.getAttribute("user"));
+        System.out.println("*******");
+	    System.out.println(itemid);
+        Taocan taocan=taocanService.selectByPrimaryKey(new Integer(itemid));
+        //model.addAttribute("itemid",itemid);
+        Image image=imageService.selectByPrimaryKey(taocan.getDisplayImageId());
+        System.out.println(Image.getNotNullValue(image));
+		model.addAttribute("itemid",itemid);
+        model.addAttribute("displayImages",Image.getNotNullValue(image));
+        image=imageService.selectByPrimaryKey(taocan.getIntroduceImageId());
+        System.out.println(Image.getNotNullValue(image));
+        model.addAttribute("introduceImages",Image.getNotNullValue(image));
+
+
+        model.addAttribute("title",taocan.getTitle());
+        model.addAttribute("introduce",taocan.getIntroduce());
+        model.addAttribute("activityForm","适用场景："+taocan.getActivityForm());
+        model.addAttribute("activityPlace","适用地点："+taocan.getActivityPlace());
+        model.addAttribute("enableArea","开通地区："+taocan.getEnableArea());
+        model.addAttribute("displayPrice",taocan.getLowPrice());
+        if(!(taocan.getTaocanTypeA()==null)){
+            model.addAttribute("typeA",taocan.getTaocanTypeA());
+            model.addAttribute("typeAPrice",taocan.getTaocanTypeAPrice());
+        }
+        if(!(taocan.getTaocanTypeB()==null)){
+            model.addAttribute("typeB",taocan.getTaocanTypeB());
+            model.addAttribute("typeBPrice",taocan.getTaocanTypeBPrice());
+        }
+        if(!(taocan.getTaocanTypeC()==null)){
+            model.addAttribute("typeC",taocan.getTaocanTypeC());
+            model.addAttribute("typeCPrice",taocan.getTaocanTypeCPrice());
+        }
+
 		return "front/goodsdetail";
 	}
 
+	@RequestMapping("submitform")
+    public String getPersonnalMakePage(@RequestParam("itemid") String itemid,HttpSession httpSession,ModelMap modelMap){
+        System.out.println("submitform");
+	    modelMap.put("itemid",itemid);
+        Taocan taocan=taocanService.selectByPrimaryKey(new Integer(itemid));
+        modelMap.put("title",taocan.getTitle());
+        System.out.println(taocan.getTaocanTypeAPrice());
+        System.out.println(taocan.getTaocanTypeBPrice());
+        System.out.println(taocan.getTaocanTypeCPrice());
+        if(!(taocan.getTaocanTypeA()==null)){
+            modelMap.addAttribute("typeA",taocan.getTaocanTypeA());
+            modelMap.addAttribute("typeAPrice",taocan.getTaocanTypeAPrice());
+        }
+        if(!(taocan.getTaocanTypeB()==null)){
+            modelMap.addAttribute("typeB",taocan.getTaocanTypeB());
+            modelMap.addAttribute("typeBPrice",taocan.getTaocanTypeBPrice());
+        }
+        if(!(taocan.getTaocanTypeC()==null)){
+            modelMap.addAttribute("typeC",taocan.getTaocanTypeC());
+            modelMap.addAttribute("typeCPrice",taocan.getTaocanTypeCPrice());
+        }
+        modelMap.put("displayImage",taocan.getSearchDisplayImage());
+	    return "back/user/personalmake";
+    }
+
+	@PostMapping("submitItem")
+    @ResponseBody
+	public String submitItem(@RequestParam("itemid") String itemid,HttpSession httpSession){
+        Map<String,String> param=new HashMap<>();
+	    if(httpSession.getAttribute("user")==null){
+            param.put("isLogin","false");
+            param.put("redirectItemid",itemid);
+            JSONObject itemJSONObj = JSONObject.parseObject(JSON.toJSONString(param));
+            return itemJSONObj.toString();
+        }
+        param.put("isLogin","true");
+        UserBasic userBasic=(UserBasic)httpSession.getAttribute("user");
+        System.out.println(userBasic.getId());
+        param.put("redirectItemid",itemid);
+		return JSONObject.parseObject(JSON.toJSONString(param)).toString();
+	}
+
 	@GetMapping("login")
-	public String login(HttpServletRequest request) {
+	public String login(HttpServletRequest request, @RequestParam(value="redirectURL",required=false) String redirectURL, ModelMap modelMap) {
 		System.out.println("login");
 		try {
             String url = WebUtils.getSavedRequest(request).getRequestUrl();
@@ -64,8 +224,54 @@ public class UserController {
 
         }
         System.out.println(SecurityUtils.getSubject().getSession().getId());
+        System.out.println("@GetMapping(\"login\")"+redirectURL);
+		if(!(redirectURL==null)){
+            modelMap.put("redirectURL",redirectURL);
+        }else {
+		    modelMap.put("redirectURL","");
+        }
 		return "front/login";
 	}
+    @PostMapping("login")
+    public String login(HttpServletRequest request, UserBasic user,@RequestParam("redirectURL") String redirectURL,boolean rememberMe, RedirectAttributes redirectAttributes) {
+        if (StringUtils.isEmpty(user.getEmail()) || StringUtils.isEmpty(user.getPassword())) {
+            redirectAttributes.addAttribute("message", "用户名或密码不能为空！");
+            return "redirect:login";
+        }
+        CustomToken token = new CustomToken(user.getEmail(), user.getPassword(), Identity.USER);
+        logger.info("rememberMe: " + rememberMe);
+        token.setRememberMe(rememberMe);
+        try {
+            SecurityUtils.getSubject().login(token);
+            if (SecurityUtils.getSubject().isAuthenticated()) {
+                ShiroHelper.flushSession();
+                HttpSession session = request.getSession();
+                UserBasic userBasic = userService.selectByEmail(user.getEmail());
+                userService.userAttrHandler(userBasic);
+                session.setAttribute("user", userBasic);
+                System.out.println(redirectURL);
+                if(!(redirectURL==null) && !redirectURL.equals("")){
+                    return "redirect:"+redirectURL;
+                }
+				return "redirect:index";
+            } else {
+                return "redirect:login";
+            }
+        } catch (UnknownAccountException uae) {
+            logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,未知账户");
+            redirectAttributes.addAttribute("message", "用户名不存在");
+        } catch (IncorrectCredentialsException ice) {
+            logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,错误的凭证");
+            redirectAttributes.addAttribute("message", "密码不正确");
+        } catch (LockedAccountException ule) {
+            logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,用户被锁定");
+            redirectAttributes.addAttribute("message", "用户被锁定");
+        } catch (DisabledAccountException dae) {
+            logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,用户未激活");
+            redirectAttributes.addAttribute("message", "用户未激活");
+        }
+        return "redirect:login";
+    }
 
 	@GetMapping("logout")
 	public String logout() {
@@ -209,42 +415,6 @@ public class UserController {
 		return userService.selectOne(basic) != null;
 	}
 
-	@PostMapping("login")
-	public String login(HttpServletRequest request, UserBasic user, boolean rememberMe, RedirectAttributes redirectAttributes) {
-		if (StringUtils.isEmpty(user.getEmail()) || StringUtils.isEmpty(user.getPassword())) {
-			redirectAttributes.addAttribute("message", "用户名或密码不能为空！");
-			return "redirect:login";
-		}
-		CustomToken token = new CustomToken(user.getEmail(), user.getPassword(), Identity.USER);
-		logger.info("rememberMe: " + rememberMe);
-		token.setRememberMe(rememberMe);
-		try {
-			SecurityUtils.getSubject().login(token);
-			if (SecurityUtils.getSubject().isAuthenticated()) {
-				ShiroHelper.flushSession();
-				HttpSession session = request.getSession();
-				UserBasic userBasic = userService.selectByEmail(user.getEmail());
-				userService.userAttrHandler(userBasic);
-				session.setAttribute("user", userBasic);
-				return "redirect:index";
-			} else {
-				return "redirect:login";
-			}
-		} catch (UnknownAccountException uae) {
-			logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,未知账户");
-			redirectAttributes.addAttribute("message", "用户名不存在");
-		} catch (IncorrectCredentialsException ice) {
-			logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,错误的凭证");
-			redirectAttributes.addAttribute("message", "密码不正确");
-		} catch (LockedAccountException ule) {
-			logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,用户被锁定");
-			redirectAttributes.addAttribute("message", "用户被锁定");
-		} catch (DisabledAccountException dae) {
-			logger.debug("对用户[" + user.getEmail() + "]进行登录验证..验证未通过,用户未激活");
-			redirectAttributes.addAttribute("message", "用户未激活");
-		}
-		return "redirect:login";
-	}
 
 	@PostMapping("getUserById")
 	@ResponseBody

@@ -47,10 +47,10 @@
 
     <loggers>
         <!--<logger name="org.springframework" level="INFO"/>-->
-        <!--<logger name="org.mybatis" level="INFO"/>-->
+        <logger name="com.hpe.findlover.mapper" level="DEBUG"/>
         <!--<logger name="org.apache.shiro" level="INFO"/>-->
         <logger name="com.hpe.findlover" level="warn"/>
-        <root level="info">
+        <root level="warn">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>
             <appender-ref ref="RollingFileWarn"/>

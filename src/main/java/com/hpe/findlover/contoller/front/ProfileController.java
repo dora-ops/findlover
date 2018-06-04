@@ -2,14 +2,11 @@ package com.hpe.findlover.contoller.front;
 
 import com.hpe.findlover.model.*;
 import com.hpe.findlover.service.*;
-import com.hpe.findlover.service.ComplainService;
-import com.hpe.findlover.service.FollowService;
 import com.hpe.findlover.util.Constant;
 import com.hpe.findlover.util.LoverUtil;
 import com.hpe.findlover.util.SessionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,11 +49,12 @@ public class ProfileController {
 
 	@GetMapping("{id}")
 	public String getProfileById(@PathVariable("id") int userId, Model model) {
-		Integer sessionUserId = SessionUtils.getSessionAttr( "user", UserBasic.class).getId();
+//		Integer sessionUserId = SessionUtils.getSessionAttr( "user", UserBasic.class).getId();
+		Integer sessionUserId=100002;
 		//增加访问记录
-		if (sessionUserId!=userId) {
-			visitTraceService.insertSelective(new VisitTrace(null,sessionUserId, userId, new Date(),0));
-		}
+//		if (sessionUserId!=userId) {
+//			visitTraceService.insertSelective(new VisitTrace(null,sessionUserId, userId, new Date(),0));
+//		}
 
 		UserBasic basic = userBasicService.selectByPrimaryKey(userId);
 		if (basic.getAuthority() == Constant.PROFILE_AUTH_NONE) {

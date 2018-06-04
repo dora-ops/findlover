@@ -22,9 +22,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /***
  * @author  gss
@@ -92,7 +94,8 @@ public class OtherSayController {
 	@ResponseBody
 	public String message(@Param("pageNum")Integer pageNum,@Param("type")String type,HttpServletRequest request) throws JsonProcessingException {
 		logger.info("pageNum=="+pageNum+"......type=="+type);
-		Integer userId = SessionUtils.getSessionAttr("user",UserBasic.class).getId();
+//		Integer userId = SessionUtils.getSessionAttr("user",UserBasic.class).getId();
+		Integer userId=100002;
 		if(Constant.HOT.equals(type)){
 			PageHelper.startPage(pageNum,4,"reply_count desc,like_count desc");
 		}else if(Constant.NEW.equals(type)){
@@ -109,7 +112,9 @@ public class OtherSayController {
 	@ResponseBody
 	public String followMessage(@Param("pageNum")Integer pageNum,HttpServletRequest request) throws JsonProcessingException {
 		logger.info("pageNum=="+pageNum);
-		UserBasic userBasic = SessionUtils.getSessionAttr("user",UserBasic.class);
+//		UserBasic userBasic = SessionUtils.getSessionAttr("user",UserBasic.class);
+        UserBasic userBasic=new UserBasic();
+        userBasic.setId(100002);
 		PageHelper.startPage(pageNum,4,"pub_time desc");
 		List<Message> list = messageService.selectMessageByFollow(userBasic.getId());
 		formatMessage(list,userBasic.getId());
@@ -163,7 +168,9 @@ public class OtherSayController {
         Essay essayObj = essayService.selectEssayAndWriter(id);
         essayObj.setVisitCount(essayObj.getVisitCount()+1);
         essayService.updateByPrimaryKeySelective(essayObj);
-        UserBasic user = SessionUtils.getSessionAttr( "user", UserBasic.class);
+//        UserBasic user = SessionUtils.getSessionAttr( "user", UserBasic.class);
+        UserBasic user=new UserBasic();
+        user.setId(100002);
         WriterEssayLike writerEssayLike = new WriterEssayLike();
         writerEssayLike.setUserId(user.getId());
         writerEssayLike.setEssayId(id);

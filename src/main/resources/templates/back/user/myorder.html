@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/myorder.css}">
+    <!--引入My97DatePicker日期组件的js文件 -->
+    <script type="text/javascript" th:src="@{/plugins/My97DatePicker/WdatePicker.js}"> </script>
+    <title>我的订单</title>
+</head>
+<body>
+<div class="page-order">
+    <div class="mod-pageHeader">
+        <h1 class="pageHeader_headline">订单管理</h1>
+    </div>
+
+    <!-- 搜索表单 开始 -->
+    <!-- 搜索表单 开始 -->
+    <form action="/home/order/page.action" method="GET" id="j-orderSearchForm">
+        <!--顶部搜索 开始 @note: 第一期被废弃，前端不显示  -->
+        <div class="pageH-search dn">
+            <div class="pageHeader_info">
+                <div class="mod-topSearch">
+                    <input type="text" class="topSearch_input" placeholder="输入商品标题或订单号" name="keywords" disabled="disabled">
+                    <a href="javascript:void(0);" class="topSearch_btn" j-delegate="orderSearch"></a>
+                </div>
+                <div class="mod-topDropdown">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="javascript:void(0);" j-delegate="toggleFilterPanel">
+                            <span class="dropdown-toggle_txt">更多筛选条件</span>
+                            <i class="arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--顶部搜索 结束-->
+
+        <!--订单搜索 开始-->
+        <div class="orderSearch_main" id="j-orderFilterPanel">
+            <ul class="whole">
+                <li class="whole_col1">
+                    <label class="whole_label">交易状态：</label>
+                    <div class="order_selectBox" j-delegate="createPcSelect">
+                        <input type="hidden" name="status" value="" data-initialval="">
+                        <div data-pcselect-elem="handler" class="order_selectInBox">
+                            <span class="pl10" data-value="">全部</span>
+                            <i class="topNav_select"></i>
+                        </div>
+                        <div class="order_selt" style="display:none;" data-pcselect-elem="listWrapper">
+                            <ul class="select_ul" data-pcselect-elem="optionList">
+                                <li><a href="javascript:void(0);" data-value="">全部</a></li>
+                                <li><a href="javascript:void(0);" data-value="0">等待买家付款</a></li>
+                                <li><a href="javascript:void(0);" data-value="7">组团进行中</a></li>
+                                <li><a href="javascript:void(0);" data-value="1">等待卖家发货</a></li>
+                                <li><a href="javascript:void(0);" data-value="2">卖家已发货</a></li>
+                                <li><a href="javascript:void(0);" data-value="5">退款中</a></li>
+                                <li><a href="javascript:void(0);" data-value="6">部分订单退款中</a></li>
+                                <li><a href="javascript:void(0);" data-value="3">交易成功</a></li>
+                                <li><a href="javascript:void(0);" data-value="4">交易关闭</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="whole_col1">
+                    <label class="whole_label">成交时间：</label>
+                    <div class="order_selectBox select_timeBox">
+                        <div>
+                            <input class="popupDatepicker" name="st" value="" data-initialval="" data-elem="fromDay" j-delegate="createDatePicker" data-minyear="2014" data-maxyear="" data-mindate="2014-09-30" data-maxdate="" placeholder="起始日期" onClick="WdatePicker()">
+                        </div>
+                    </div>
+                    <span class="sellCenter_thLine">-</span>
+                    <div class="order_selectBox select_timeBox">
+                        <div>
+                            <input class="popupDatepicker" name="et" value="" data-initialval="" data-elem="toDay" j-delegate="createDatePicker" data-minyear="2014" data-maxyear="" data-mindate="2014-09-30" data-maxdate="" placeholder="截止日期" onClick="WdatePicker()">
+                        </div>
+                    </div>
+                </li>
+
+                <!-- 卖家昵称 筛选条件 @note: 第一期废弃，前端不显示 -->
+                <li class="whole_col1 whole_col3 dn">
+                    <label class="whole_label">卖家昵称：</label>
+                    <div class="order_selectBox" j-delegate="createPcSelect">
+                        <input type="hidden" name="seller" value="" disabled="disabled">
+                        <div data-pcselect-elem="handler" class="order_selectInBox">
+                            <span class="pl10">啄木鸟旗舰店</span>
+                            <i class="topNav_select"></i>
+                        </div>
+                        <div class="order_selt" style="display:none;" data-pcselect-elem="listWrapper">
+                            <ul class="select_ul" data-pcselect-elem="optionList">
+                                <li><a href="#" data-value="-1">全部</a></li>
+                                <li><a href="#" data-value="0">啄木鸟旗舰店</a></li>
+                                <li><a href="#" data-value="1">理财订单</a></li>
+                                <li><a href="#" data-value="2">保险订单</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <!-- 评价状态 筛选条件 @note: 第一期废弃，前端不显示 -->
+                <li class="whole_col1 dn">
+                    <label class="whole_label">评价状态：</label>
+                    <div class="order_selectBox" j-delegate="createPcSelect">
+                        <input type="hidden" name="comment" value="" disabled="disabled">
+                        <div data-pcselect-elem="handler" class="order_selectInBox">
+                            <span class="pl10">理财订单</span><i class="topNav_select"></i>
+                        </div>
+                        <div class="order_selt" style="display:none;" data-pcselect-elem="listWrapper">
+                            <ul class="select_ul" data-pcselect-elem="optionList">
+                                <li><a href="#" data-value="-1">全部</a></li>
+                                <li><a href="#">机票订单</a></li>
+                                <li><a href="#">理财订单</a></li>
+                                <li><a href="#">保险订单</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <!-- 售后服务 筛选条件 @note: 第一期废弃，前端不显示 -->
+                <li class="whole_col1 whole_col3 dn">
+                    <label class="whole_label">售后服务：</label>
+                    <div class="order_selectBox" j-delegate="createPcSelect">
+                        <input type="hidden" name="afterSale" value="" disabled="disabled">
+                        <div data-pcselect-elem="handler" class="order_selectInBox">
+                            <span class="pl10">全部</span><i class="topNav_select"></i>
+                        </div>
+                        <div class="order_selt" style="display:none;" data-pcselect-elem="listWrapper">
+                            <ul class="select_ul" data-pcselect-elem="optionList">
+                                <li><a href="#" data-value="-1">全部</a></li>
+                                <li><a href="#">已投诉</a></li>
+                                <li><a href="#">退款中</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="whole_col3">
+                    <div class="pageH-btn">
+                        <a href="javascript:void(0);" class="mod-comm_btn" j-delegate="advancedOrderSearch">搜索</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--订单搜索 结束-->
+    </form>
+    <!-- 搜索表单 结束 -->
+    <!-- 搜索表单 结束 -->
+    <div class="orderTable_newPage">
+        <table class="newOrder_tableTb" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <colgroup>
+                <col class="baobei">
+                <col class="price">
+                <col class="nub">
+                <col class="goods_operation">
+                <col class="disbursements">
+                <col class="transaction_status">
+                <col class="trade_operate">
+            </colgroup>
+            <thead>
+            <tr><th class="baobei">商品信息</th>
+                <th class="price">单价（元）</th>
+                <th class="nub">数量</th>
+                <th class="goods_operation">商品操作</th>
+                <th class="disbursements">实付款（元）</th>
+                <th class="transaction_status">交易状态</th>
+                <th class="trade_operate">交易操作</th>
+            </tr></thead>
+        </table>
+    </div>
+
+    <!-- 顶部操作分页 开始 @note: 第一期被废弃，前端不显示了 -->
+    <div class="orderT_operateBar clearfix dn">
+        <div class="orderT_operateBar_check">
+            <div class="orderT_operateBar_items">
+                <div class="select-all">
+                    <div class="checkBox-order" j-delegate="fullSelect" data-checkbox-group="order" data-checkbox-selectedclass="checkBox-order-selected">
+                        <input class="checkBox" type="checkbox" name="" value="true">
+                        <label for="">勾选商品</label>
+                    </div>
+                    <span class="tx">全选</span>
+                </div>
+            </div>
+            <div class="orderT_operateBar_items">
+                <a class="btn-normal" href="javascript:void(0);" j-delegate="batchlyConfirmReceipt" data-ordercheckbox-name="order">批量确认收货</a>
+            </div>
+        </div>
+        <div class="orderT_operateBar_right">
+            <div class="mod-page-small" style="display:none">
+                <a class="page_btn page_btn-disabled" href="{url}" j-delegate="load-page" data-container-selector="#widget-pager-container">&lt;</a>
+                <div class="page_content"><em class="tx">1</em><em class="divideLine">/</em><em class="tx">1</em></div>
+                <a class="page_btn" href="{url}" j-delegate="load-page" data-container-selector="#widget-pager-container">&gt;</a>
+            </div></div>
+    </div>
+    <!-- 顶部操作分页 结束 -->
+    <!-- 主体 开始 -->
+    <div class="orderT_bd orderTable_newPage" data-elem="loadingTipContainer">
+        <!-- foreach start 以店铺为单位进行循环 -->
+        <!-- 单店铺购物车 开始 -->
+        <!--  分包裹显示 start -->
+        <table class="newOrder_tableCon" width="100%" border="0" cellspacing="0" cellpadding="0" j-delegate="hoverAddClass" data-hoveraddclass="shopOrderList-selected">
+            <colgroup>
+                <col class="baobei">
+                <col class="price">
+                <col class="nub">
+                <col class="goods_operation">
+                <col class="disbursements">
+                <col class="transaction_status">
+                <col class="trade_operate">
+            </colgroup>
+            <tbody>
+            <tr class="tableCon_titleTr">
+                <td colspan="7">
+                    <div class="checkBox-order dn dn" j-delegate="partialSelect" data-checkbox-name="order" data-id="234475118116" data-isonly="true">
+                        <input class="checkBox" type="checkbox" name="pid" value="234475118116"> <label for="">勾选此店铺下所有商品</label>
+                    </div>
+                    <div class="shop_info  ml10 ml10">
+                        <div class="cenOrder_box01">
+							<span class="shop_info_date">
+								<!-- <em class="mr10 fsb">2018-05-28 11:38</em> -->
+								<em class="mr10 fsb">2018-05-28</em>
+							</span>
+                            <!--  <span class="shop_info_orderNumber">
+                                <em>交易号：334475672952</em>
+                            </span>  -->
+                            <span class="shop_info_orderNumber">
+								<em>订单号：234475118116</em>
+							</span>
+                        </div>
+                        <span class="shop_info_site">
+							<a href="javascript:void(0);" class="shop_site" rseat="1501231_entst" title="" data-shopid="1151376996" data-shop-name="北京爱奇艺科技有限公司" data-shop-contact="13456209720" j-delegate="confirmOrderPopShopInfo"><i class="pack_icon "></i>由爱奇艺i71发货</a>
+						</span>
+                        <a class="contact_link dn" href="javascript:void(0);" rseat="1501231_cntctus" data-pb="r=爱奇艺i71官方旗舰店&amp;stno=1151376996" j-delegate="openContactServantWindow" data-shopid="1151376996" onclick=""></a>
+                    </div>
+                    <!-- 如果 此订单参与送会员活动 -->
+                </td>
+            </tr>
+            <!-- foreach start 一个商品一个商品地 循环 -->
+            <tr class="tableCon_conTr">
+                <td class="baobei">
+                    <a href="/item/19rro89v9k" target="_blank" class="activity_pic">
+							<span class="order_picBox">
+								<img src="" alt="【买就送手柄】">
+							</span>
+                    </a>
+                    <div class="orderItems_content">
+                        <div class="orderItems_link">
+                            <a href="/item/19rro89v9k" target="_blank">【买就送手柄】爱奇艺i71定制VR-MAX4蓝光VR眼镜4代自带耳机</a>
+                        </div>
+                        <div class="orderItems_about">
+                            <p class="info_section" title="颜色: 黑色送手柄">
+                                <span class="tx-inline">颜色: 黑色送手柄</span>
+                            </p></div>
+                    </div>
+                </td>
+                <td class="price">
+                    <div class="price_inner">
+                        <div class="priceItems">
+                            <em class="price-original">196</em>
+                        </div>
+                        <div class="priceItems">
+                            <em class="price-now">108</em>
+                        </div>
+                    </div>
+                </td>
+
+                <td class="nub">
+                    <div class="nub_inner">
+                        <em>1</em>
+                    </div>
+                </td>
+                <td class="goods_operation">
+                    <div class="goodsOPeration_inner">
+                        <div class="itemOperateItems">
+                            <br>
+                        </div>
+                    </div>
+                </td>
+                <!-- 只有 第一个商品的ul li中才输出总价 -->
+                <td rowspan="1" class="disbursements">
+                    <div class="disbursements_inner">
+                        <div class="sumItems">
+                            <em class="sumItems_price">108</em>
+                        </div>
+                        <div class="sumItems">
+                            <p class="sumItems_info" title="（含运费：0）">（含运费：0 ）</p>
+                        </div>
+                    </div>
+                </td>
+
+                <td rowspan="1" class="transaction_status">
+                    <div class="transStatus_inner">
+                        <div class="statusItems">等待买家付款</div>
+                        <div class="statusItems">
+                            <a class="myCen_orderInfo" href="/home/order/detail.action?pid=234475118116" target="_blank">订单详情</a>
+                        </div>
+                        <!-- 查看物流信息展示弹层时添加class order_wlPop (分支1.6.1)-->
+                        <div class="statusItems ">
+                        </div>
+                    </div>
+                </td>
+
+                <td rowspan="1" class="trade_operate">
+                    <div class="tradeOPerate_inner">
+                        <div class="operateItems">
+                            <a href="javascript:void(0);" class="mod-comm_btn" target="_blank" j-delegate="payAction" data-isglobal="false">付款</a>
+                        </div>
+                        <div class="operateItems mt5">
+                            <a href="javascript:void(0);" class="myCen_orderInfo-comm_btn" j-delegate="cancel_order">取消订单</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 分包裹显示 end -->
+    </div>
+    <!-- 主体 结束is-hidden -->
+</div>
+
+</body>
+</html>

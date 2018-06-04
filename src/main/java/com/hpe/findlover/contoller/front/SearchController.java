@@ -1,12 +1,14 @@
 package com.hpe.findlover.contoller.front;
 
-import  com.github.pagehelper.PageHelper;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hpe.findlover.model.*;
 import com.hpe.findlover.service.*;
-import com.hpe.findlover.util.Constant;
 import com.hpe.findlover.util.LoverUtil;
 import com.hpe.findlover.util.SessionUtils;
+import net.sf.json.JSONArray;
 import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,22 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * @author sinnamm
- * @Date Create in  2017/10/17.
+ * @author mwq
+ * @Date Create in
  */
 @Controller
 @RequestMapping("search")
 public class SearchController {
     private Logger logger = LogManager.getLogger(SearchController.class);
 
+    @Autowired
+    private TaocanService taocanService;
     @Autowired
     private DictService dictService;
     @Autowired
@@ -41,20 +47,47 @@ public class SearchController {
     @Autowired
     private UserLabelService userLabelService;
 
-    /**
-    * @Author sinnamm
-    * @Describtion: 跳转到search页面，要查询数据库传递的页面信息有
-     * 1、数据字典表：职业、婚史、学历，住房条件、星座、生肖、信仰
-     * 2、搜索位用户择偶条件信息和标签信息：默认是根据用户的择偶条件进行初步查询
-     * 3、广告位用户：随机从VIP用户中选择符合其性取向的用户（四位）显示在页面
-    * @Date Create in  9:03 2017/10/19
-    **/
     @GetMapping
     public String search(Model model, HttpServletRequest request) throws Exception {
-
         return "front/search";
     }
-
+    @PostMapping("/getTaocan")
+    @ResponseBody
+    public String getTaocan(@Param("activityForm") String activityForm,@Param("activityPlace") String activityPlace,
+                            @Param("highPrice") String highPrice,@Param("lowPrice") String lowPrice,
+                            @Param("pageIndex") String pageIndex){
+        System.out.println(activityForm+"--"+activityPlace+"--"+highPrice+"--"+lowPrice+"--"+pageIndex);
+        Map<String,Object> params=new HashMap<>();
+        if(!activityForm.equals("") && !activityForm.equals("全部")){
+            params.put("activityForm",activityForm);
+        }
+        if(!activityPlace.equals("") && !activityPlace.equals("全部")){
+            params.put("activityPlace",activityPlace);
+        }
+        if(!highPrice.equals("")){
+            params.put("highPrice",highPrice);
+        }
+        if(!lowPrice.equals("")){
+            params.put("lowPrice",lowPrice);
+        }
+        if(!pageIndex.equals("")){
+            params.put("pageIndex",pageIndex);
+        }
+        List<Taocan> taocans=taocanService.selectBySearchCondition(params);
+        JSONArray jsonArray=new JSONArray();
+        for (Taocan taocan:taocans){
+            Map<String,String> map=new HashMap<>();
+            map.put("href","/goodsdetail.html?itemid="+taocan.getTaocanId());
+            map.put("src",taocan.getSearchDisplayImage());
+            map.put("title",taocan.getTitle());
+            map.put("description",taocan.getIntroduce());
+            map.put("price",taocan.getLowPrice().toString());
+            JSONObject itemJSONObj = JSONObject.parseObject(JSON.toJSONString(map));
+            jsonArray.add(itemJSONObj);
+        }
+        System.out.println(jsonArray.toString());
+        return jsonArray.toString();
+    }
     @GetMapping("/getLabel")
     @ResponseBody
     public List<Label> getLabel(){
