@@ -126,6 +126,7 @@ public class AdminController {
 			redirectAttributes.addAttribute("message", "用户名不存在");
 		} catch (IncorrectCredentialsException ice) {
 			redirectAttributes.addAttribute("message", "密码不正确");
+
 		}
 		return "redirect:login";
 	}

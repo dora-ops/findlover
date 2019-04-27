@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hpe.findlover.model.*;
 import com.hpe.findlover.service.*;
 import com.hpe.findlover.token.CustomToken;
-import com.hpe.findlover.util.Constant;
-import com.hpe.findlover.util.Identity;
-import com.hpe.findlover.util.SessionUtils;
-import com.hpe.findlover.util.ShiroHelper;
+import com.hpe.findlover.util.*;
 import net.sf.json.JSONArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -303,6 +300,7 @@ public class UserController {
 		String uuid = UUID.randomUUID().toString();
 		user.setCode(uuid);
 		String tmpPassword=user.getPassword();
+        LoverUtil.getMd5Password(tmpPassword,"admin");
 		user.setPassword(new Md5Hash(user.getPassword(), ByteSource.Util.bytes(user.getEmail())).toString());
 		user.setAuthority(1);
 		//暂时将状态码设置为1
